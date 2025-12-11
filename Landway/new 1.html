@@ -26,81 +26,57 @@
   <!-- Main Stylesheet File -->
   <link href="css/style.css" rel="stylesheet">
 
+</head>
 
-<body>
+<body class="registration-page">
 
   <div class="click-closed"></div>
   <!--/ Form Search Star /-->
-  <div class="box-collapse">
-    <div class="title-box-d">
-      <h3 class="title-d">Search Property</h3>
+  <!--/ Header End /-->
+
+  <div class="registration-shell">
+    <div class="registration-visual" aria-hidden="true"></div>
+
+    <div class="registration-card">
+      <div class="title">Employee Registration</div>
+      <form action="#" novalidate>
+        <div class="employee_details">
+          <div class="input_box">
+            <label class="details" for="first-name">First Name</label>
+            <input id="first-name" name="first_name" type="text" placeholder="Enter first name" required>
+          </div>
+          <div class="input_box">
+            <label class="details" for="last-name">Last Name</label>
+            <input id="last-name" name="last_name" type="text" placeholder="Enter last name" required>
+          </div>
+          <div class="input_box">
+            <label class="details" for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="Enter your email" required>
+          </div>
+          <div class="input_box">
+            <label class="details" for="phone">Mobile Number</label>
+            <input id="phone" name="phone" type="tel" placeholder="Enter phone number" pattern="[0-9]{10}" required>
+          </div>
+          <div class="input_box">
+            <label class="details" for="employee-id">Employee ID</label>
+            <input id="employee-id" name="employee_id" type="text" placeholder="Enter employee id" required>
+          </div>
+          <div class="input_box">
+            <label class="details" for="pwd">Password</label>
+            <input id="pwd" name="password" type="password" minlength="8" maxlength="12" placeholder="Enter your password" onkeyup="checkPasswordMatch()" required>
+          </div>
+          <div class="input_box">
+            <label class="details" for="con_pwd">Confirm Password</label>
+            <input id="con_pwd" name="confirm_password" type="password" placeholder="Confirm your password" onkeyup="checkPasswordMatch()" required>
+            <span id="message"></span>
+          </div>
+        </div>
+
+        <button class="button" type="submit">Sign Up</button>
+        <p style="margin-top: 16px; margin-bottom: 0;">Already have an account? <a href="#">Login</a></p>
+      </form>
     </div>
-    <span class="close-box-collapse right-boxed ion-ios-close"></span>
-    <div class="box-collapse-wrap form">
-      <form class="form-a">
-        <div class="row">
-          <div class="col-md-12 mb-2">
-            <div class="form-group">
-              <label for="Type">Keyword</label>
-              <input type="text" class="form-control form-control-lg form-control-a" placeholder="Keyword">
-            </div>
-          </div>
-          <div class="col-md-6 mb-2">
-            <div class="form-group">
-              <label for="Type">Type</label>
-              <select class="form-control form-control-lg form-control-a" id="Type">
-                <option>All Type</option>
-                <option>For Rent</option>
-                <option>For Sale</option>
-                <option>Open House</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-6 mb-2">
-            <div class="form-group">
-              <label for="city">City</label>
-              <select class="form-control form-control-lg form-control-a" id="city">
-                <option>All City</option>
-                <option>Alabama</option>
-                <option>Arizona</option>
-                <option>California</option>
-                <option>Colorado</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-6 mb-2">
-            <div class="form-group">
-              <label for="bedrooms">Bedrooms</label>
-              <select class="form-control form-control-lg form-control-a" id="bedrooms">
-                <option>Any</option>
-                <option>01</option>
-                <option>02</option>
-                <option>03</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-6 mb-2">
-            <div class="form-group">
-              <label for="garages">Garages</label>
-              <select class="form-control form-control-lg form-control-a" id="garages">
-                <option>Any</option>
-                <option>01</option>
-                <option>02</option>
-                <option>03</option>
-                <option>04</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-6 mb-2">
-            <div class="form-group">
-              <label for="bathrooms">Bathrooms</label>
-              <select class="form-control form-control-lg form-control-a" id="bathrooms">
-                <option>Any</option>
-                <option>01</option>
-                <option>02</option>
-                <option>03</option>
-              </select>
-            </div>
+  </div>
           </div>
           <div class="col-md-6 mb-2">
             <div class="form-group">

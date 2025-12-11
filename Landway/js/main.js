@@ -150,17 +150,24 @@
 })(jQuery);
 
 function checkPasswordMatch() {
-    var password = document.getElementById("pwd").value;
-    var confirmPassword = document.getElementById("con_pwd").value;
+	var password = document.getElementById("pwd");
+	var confirmPassword = document.getElementById("con_pwd");
+	var message = document.getElementById("message");
 
-    if (pwd === con_pwd) {
-        document.getElementById("message").style.color = "green";
-        document.getElementById("message").textContent = "Passwords match!";
-    } else {
-        document.getElementById("message").style.color = "red";
-        document.getElementById("message").textContent = "Passwords do not match!";
-    }
+	if (!password || !confirmPassword || !message) {
+		return;
+	}
+
+	if (!confirmPassword.value.length) {
+		message.textContent = "";
+		return;
+	}
+
+	if (password.value === confirmPassword.value) {
+		message.style.color = "green";
+		message.textContent = "Passwords match!";
+	} else {
+		message.style.color = "red";
+		message.textContent = "Passwords do not match!";
+	}
 }
-
-
-        }
