@@ -1653,6 +1653,560 @@ footer .credits {
   color: #ffffff;
 }
 
+/*======================================
+//--//-->   LOGIN PAGE - CLEAN & MODERN
+======================================*/
+
+/* Page Background & Layout */
+body.login-page {
+  background: #ffffff;
+  padding-top: 80px;
+  color: #0f1d2b;
+}
+
+/* Policy Header Styling */
+.policy-header {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+  color: #0f1d2b;
+  padding: 60px 20px;
+  text-align: center;
+  margin-bottom: 50px;
+  border-bottom: 1px solid #e8ecf1;
+}
+
+.policy-header h1 {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+  color: #0f1d2b;
+}
+
+.policy-header .lead {
+  font-size: 18px;
+  font-weight: 400;
+  color: #516072;
+  margin: 0;
+}
+
+/* Container for centered content */
+.policy-container {
+  max-width: 900px;
+  margin: 0 auto 80px;
+  padding: 0 20px;
+}
+
+/* Article card styling */
+.policy-article {
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e8ecf1;
+}
+
+/* Section padding and borders */
+.policy-section {
+  padding: 40px;
+  border-bottom: 1px solid #e8ecf1;
+}
+
+.policy-section:last-child {
+  border-bottom: none;
+}
+
+.policy-section-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #0f1d2b;
+  margin-bottom: 30px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #2eca6a;
+  display: inline-block;
+}
+
+/* Form styling for login */
+.form-a {
+  margin: 0;
+}
+
+.form-a .form-group {
+  margin-bottom: 24px;
+}
+
+.form-a label {
+  display: block;
+  font-weight: 600;
+  color: #0f1d2b;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.form-a .form-control {
+  border-radius: 8px;
+  border: 1px solid #e8ecf1;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #0f1d2b;
+  font-family: 'Poppins', sans-serif;
+  height: auto;
+  transition: all 0.2s ease;
+}
+
+.form-a .form-control:focus {
+  border-color: #2eca6a;
+  box-shadow: 0 0 0 3px rgba(46, 202, 106, 0.1);
+  outline: none;
+}
+
+.form-a .form-control.form-control-a {
+  height: auto;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 14px;
+}
+
+/* Checkbox and radio styling */
+.form-a .form-check {
+  padding: 0;
+  margin: 16px 0;
+}
+
+.form-a .form-check-input {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  cursor: pointer;
+  accent-color: #2eca6a;
+  border: 1px solid #c9d6e4;
+  border-radius: 4px;
+}
+
+.form-a .form-check-input:hover {
+  border-color: #2eca6a;
+}
+
+.form-a .form-check-input:checked {
+  background-color: #2eca6a;
+  border-color: #2eca6a;
+}
+
+.form-a .form-check-label {
+  color: #516072;
+  font-weight: 500;
+  margin: 0;
+  cursor: pointer;
+  user-select: none;
+  padding-left: 4px;
+}
+
+/* Message styling */
+.form-a #sendmessage {
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  background-color: #d4edda;
+  display: none;
+  text-align: center;
+  padding: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  border-radius: 6px;
+}
+
+.form-a #errormessage {
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  background-color: #f8d7da;
+  display: none;
+  text-align: center;
+  padding: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  border-radius: 6px;
+}
+
+.form-a #sendmessage.show,
+.form-a #errormessage.show,
+.form-a .show {
+  display: block;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Validation error styling */
+.form-a .validation {
+  color: #d9534f;
+  display: none;
+  margin: 4px 0 20px 0;
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.form-a .validation.show {
+  display: block;
+}
+
+/* Button styling */
+.btn {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn.btn-b {
+  background-color: #2eca6a;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 14px 32px;
+  letter-spacing: 0.05rem;
+  width: 100%;
+}
+
+.btn.btn-b:hover {
+  background-color: #26a356;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(46, 202, 106, 0.3);
+}
+
+.btn.btn-b:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(46, 202, 106, 0.2);
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+/* Row and column styling for Remember & Forgot password */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -12px;
+}
+
+.col-6 {
+  flex: 0 0 50%;
+  padding: 12px;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Footer styling */
+.section-footer {
+  padding: 60px 20px;
+  margin: 60px 0 0 0;
+  background: #f5f7fa;
+  border-top: 1px solid #e8ecf1;
+}
+
+.section-footer .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-footer .row {
+  margin: 0;
+}
+
+.section-footer .col-sm-12 {
+  flex: 0 0 100%;
+  padding: 0;
+}
+
+.section-footer .col-md-4 {
+  flex: 0 0 33.333%;
+  padding: 0 15px;
+}
+
+.section-footer .section-md-t3 {
+  padding-top: 3rem;
+}
+
+.section-footer .widget-a {
+  margin-bottom: 2rem;
+}
+
+.section-footer .w-header-a {
+  margin-bottom: 1.5rem;
+}
+
+.section-footer .w-title-a {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f1d2b;
+  margin: 0;
+}
+
+.section-footer .text-brand {
+  color: #000000;
+}
+
+.section-footer .color-b {
+  color: #2eca6a;
+}
+
+.section-footer .w-body-a {
+  margin-bottom: 1.5rem;
+}
+
+.section-footer .w-text-a {
+  color: #516072;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.section-footer .color-text-a {
+  color: #516072;
+}
+
+.section-footer .w-footer-a {
+  margin-top: 1.5rem;
+}
+
+.section-footer .color-a {
+  color: #0f1d2b;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.section-footer .item-list-a {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #0f1d2b;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.section-footer .item-list-a i {
+  color: #2eca6a;
+  font-size: 16px;
+}
+
+.section-footer .item-list-a a {
+  color: #0f1d2b;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.section-footer .item-list-a a:hover {
+  color: #2eca6a;
+}
+
+/* Footer bottom bar */
+footer {
+  background: #f5f7fa;
+  text-align: center;
+  padding: 30px 20px;
+  border-top: 1px solid #e8ecf1;
+}
+
+footer .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+footer .nav-footer {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+footer .nav-footer .list-inline-item {
+  margin: 0;
+}
+
+footer .nav-footer a {
+  color: #0f1d2b;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+footer .nav-footer a:hover {
+  color: #2eca6a;
+}
+
+footer .socials-a {
+  margin: 20px 0;
+}
+
+footer .socials-a .list-inline {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+footer .socials-a .list-inline-item {
+  margin: 0;
+}
+
+footer .socials-a a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: #0f1d2b;
+  background: #e8ecf1;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+footer .socials-a a:hover {
+  background: #2eca6a;
+  color: #ffffff;
+}
+
+footer .copyright-footer {
+  border-top: 1px solid #e8ecf1;
+  padding-top: 20px;
+  margin-bottom: 10px;
+}
+
+footer .copyright-footer p {
+  margin: 0;
+  color: #516072;
+  font-size: 13px;
+}
+
+footer .color-a {
+  color: #2eca6a;
+}
+
+footer .color-text-a {
+  color: #516072;
+}
+
+footer .credits {
+  font-size: 13px;
+  color: #516072;
+}
+
+footer .credits a {
+  color: #2eca6a;
+  text-decoration: none;
+}
+
+footer .credits a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .policy-header {
+    padding: 40px 16px;
+    margin-bottom: 30px;
+  }
+
+  .policy-header h1 {
+    font-size: 32px;
+  }
+
+  .policy-header .lead {
+    font-size: 16px;
+  }
+
+  .policy-container {
+    margin-bottom: 40px;
+    padding: 0 16px;
+  }
+
+  .policy-section {
+    padding: 24px;
+  }
+
+  .policy-section-title {
+    font-size: 20px;
+  }
+
+  .section-footer {
+    padding: 40px 16px;
+  }
+
+  .section-footer .col-md-4 {
+    flex: 0 0 100%;
+  }
+
+  .section-footer .section-md-t3 {
+    padding-top: 2rem;
+  }
+
+  .row {
+    margin: 0;
+  }
+
+  .col-6 {
+    flex: 0 0 100%;
+    padding: 0;
+  }
+
+  .text-right {
+    text-align: left;
+    margin-top: 12px;
+  }
+
+  .form-a .form-group {
+    margin-bottom: 16px;
+  }
+
+  .btn.btn-b {
+    padding: 12px 20px;
+  }
+
+  footer .nav-footer {
+    gap: 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 576px) {
+  .policy-header h1 {
+    font-size: 26px;
+  }
+
+  .policy-header .lead {
+    font-size: 14px;
+  }
+
+  .policy-section {
+    padding: 20px 16px;
+  }
+
+  .section-footer {
+    padding: 30px 16px;
+  }
+}
+
 @media (min-width: 576px) {
   .intro .intro-title {
     font-size: 3.5rem;
@@ -2669,4 +3223,88 @@ footer .copyright {
     height: 34px;
     font-size: 12px;
   }
+}
+
+/* ======== LOGIN PAGE FORM STYLES ======== */
+/* Required field marker */
+.required-field {
+  color: #d9534f;
+}
+
+/* Form messages */
+.form-a-message {
+  padding: 14px;
+  border-radius: 6px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.form-a-message.alert-danger {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+}
+
+.form-a-message.alert-success {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+/* Form row with flex for remember & forgot */
+.form-row-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 12px;
+}
+
+.form-row-flex .form-check {
+  margin: 0;
+}
+
+/* Forgot password link */
+.forgot-link {
+  color: #2eca6a;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.forgot-link:hover {
+  color: #26a356;
+  text-decoration: underline;
+}
+
+/* Form footer link for sign up */
+.form-footer-link {
+  text-align: center;
+  padding-top: 16px;
+  border-top: 1px solid #e8ecf1;
+  margin-top: 24px;
+}
+
+.form-footer-link p {
+  color: #516072;
+  margin: 16px 0 0 0;
+  font-size: 14px;
+}
+
+.form-footer-link a {
+  color: #2eca6a;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.form-footer-link a:hover {
+  color: #26a356;
+  text-decoration: underline;
 }

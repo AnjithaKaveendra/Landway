@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Login - Land Way</title>
+  <title>Sign In - Land Way</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="" name="keywords">
   <meta content="" name="description">
@@ -25,52 +25,113 @@
 
   <!-- Main Stylesheet File -->
   <link href="css/style.css" rel="stylesheet">
+  
 
 </head>
 
-<body class="login-page">
+<body class="policy-page">
 
+  <!-- Navbar Start -->
+  <nav class="navbar navbar-expand-lg navbar-light navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDefault"
+        aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand text-brand" href="index.html">Land<span class="color-b">Way</span></a>
+      <div class="navbar-collapse collapse" id="navbarDefault">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="property-grid.html">Land</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="blog-grid.html">Gallery</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="login.html">Login</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!--/ Navbar End /-->
+  
   <!-- Login Header -->
   <div class="policy-header">
     <h1>Sign In to Your Account</h1>
-    <p class="lead">Access your Land Way account to manage your property listings and offers.</p>
+    <p class="lead">Access your property portfolio and manage your listings securely.</p>
   </div>
 
   <!-- Login Content -->
   <main class="policy-container">
     <article class="policy-article">
       <section class="policy-section">
-        <h2 class="policy-section-title">Welcome Back</h2>
-        <p>Enter your credentials to access your account and continue managing your property listings.</p>
-
-        <form id="login-form" action="#" novalidate>
-          <div style="margin-bottom: 20px;">
-            <label class="details" for="login-email" style="display: block; font-weight: 600; color: #0f1d2b; margin-bottom: 8px;">Email Address</label>
-            <input id="login-email" name="email" type="email" placeholder="example@email.com" autocomplete="email" required
-              style="width: 100%; padding: 12px 14px; border: 1px solid #e8ecf1; border-radius: 8px; font-size: 14px; color: #0f1d2b; font-family: Poppins;">
-          </div>
-          <div style="margin-bottom: 20px;">
-            <label class="details" for="login-password" style="display: block; font-weight: 600; color: #0f1d2b; margin-bottom: 8px;">Password</label>
-            <input id="login-password" name="password" type="password" minlength="8" maxlength="32" placeholder="••••••••" autocomplete="current-password" required
-              style="width: 100%; padding: 12px 14px; border: 1px solid #e8ecf1; border-radius: 8px; font-size: 14px; color: #0f1d2b; font-family: Poppins;">
+        <h2 class="policy-section-title">Sign In</h2>
+        
+        <!-- Login Form -->
+        <form class="form-a" method="POST" action="#" onsubmit="return validateLoginForm(event);">
+          
+          <!-- Error Message -->
+          <div id="errormessage" class="form-a-message alert alert-danger" role="alert" style="display: none;">
+            <i class="fa fa-exclamation-circle"></i> <span id="errorText">Please correct the errors below.</span>
           </div>
 
-          <label style="margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; color: #516072; cursor: pointer;">
-            <input type="checkbox" id="toggle-password"> <span>Show password</span>
-          </label>
+          <!-- Success Message -->
+          <div id="sendmessage" class="form-a-message alert alert-success" role="alert" style="display: none;">
+            <i class="fa fa-check-circle"></i> <span id="successText">Sign in successful! Redirecting...</span>
+          </div>
 
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
-            <label style="display: inline-flex; align-items: center; gap: 8px; margin: 0; color: #516072; cursor: pointer;">
-              <input type="checkbox" name="remember" aria-label="Remember me"> <span>Remember me</span>
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="email">Email Address <span class="required-field">*</span></label>
+            <input class="form-control form-control-a" type="email" id="email" name="email" placeholder="Enter your email address" required>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <label for="password">Password <span class="required-field">*</span></label>
+            <input class="form-control form-control-a" type="password" id="password" name="password" placeholder="Enter your password" minlength="8" required>
+          </div>
+
+          <!-- Show Password Checkbox -->
+          <div class="form-group form-check">
+            <input class="form-check-input" type="checkbox" id="showPassword" onchange="togglePasswordVisibility()">
+            <label class="form-check-label" for="showPassword">
+              Show Password
             </label>
-            <a href="#" style="color: #2eca6a; text-decoration: none; font-weight: 600;">Forgot password?</a>
           </div>
 
-          <div id="login-error" class="auth-helper" aria-live="polite" style="color: #d9534f; font-weight: 600; min-height: 20px; margin-bottom: 20px;"></div>
+          <!-- Remember Me & Forgot Password Row -->
+          <div class="form-group form-row-flex">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
+              <label class="form-check-label" for="rememberMe">
+                Remember me
+              </label>
+            </div>
+            <a href="#" class="forgot-link">Forgot Password?</a>
+          </div>
 
-          <button class="button" type="submit" style="width: 100%; padding: 14px; background: #2eca6a; border: none; color: #ffffff; font-weight: 600; border-radius: 8px; cursor: pointer; margin-bottom: 20px; transition: all 0.3s ease; font-size: 16px; font-family: Poppins;">Sign In</button>
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-b btn-block">
+            <i class="fa fa-sign-in"></i> Sign In
+          </button>
 
-          <p style="text-align: center; color: #516072; margin: 0;">Don't have an account? <a href="Land Way/new 1.html" style="color: #2eca6a; text-decoration: none; font-weight: 600;">Create one</a></p>
+          <!-- Sign Up Link -->
+          <div class="form-footer-link">
+            <p>Don't have an account? 
+              <a href="Land Way/register.html">Create Account</a>
+            </p>
+          </div>
         </form>
       </section>
     </article>
@@ -88,20 +149,18 @@
             <div class="w-body-a">
               <p class="w-text-a color-text-a">
                 Efficient platform for buying a land. It
-                simplifies the process with features like
-                digital contract signing, secure payments,
-                and legal compliance, ensuring smooth
-                transactions.
+				simplifies the process with features like
+				digital contract signing, secure payments,
+				and legal compliance, ensuring smooth
+				transactions.
               </p>
             </div>
             <div class="w-footer-a">
               <ul class="list-unstyled">
                 <li class="color-a">
-                  <span class="color-text-a">Email .</span> contact@hsad.com
-                </li>
+                  <span class="color-text-a">Email .</span> contact@hsad.com</li>
                 <li class="color-a">
-                  <span class="color-text-a">Phone .</span> +54 356 945234
-                </li>
+                  <span class="color-text-a">Phone .</span> +54 356 945234</li>
               </ul>
             </div>
           </div>
@@ -112,26 +171,28 @@
               <h3 class="w-title-a text-brand">The Company</h3>
             </div>
             <div class="w-body-a">
-              <ul class="list-unstyled">
-                <li class="item-list-a">
-                  <i class="fa fa-angle-right"></i> <a href="index.html">Home</a>
-                </li>
-                <li class="item-list-a">
-                  <i class="fa fa-angle-right"></i> <a href="about.html">About</a>
-                </li>
-                <li class="item-list-a">
-                  <i class="fa fa-angle-right"></i> <a href="property-grid.html">Land</a>
-                </li>
-                <li class="item-list-a">
-                  <i class="fa fa-angle-right"></i> <a href="blog-grid.html">Gallery</a>
-                </li>
-                <li class="item-list-a">
-                  <i class="fa fa-angle-right"></i> <a href="contact.html">Contact</a>
-                </li>
-                <li class="item-list-a">
-                  <i class="fa fa-angle-right"></i> <a href="policy.html">Privacy Policy</a>
-                </li>
-              </ul>
+              <div class="w-body-a">
+                <ul class="list-unstyled">
+                  <li class="item-list-a">
+                    <i class="fa fa-angle-right"></i> <a href="index.html">Home</a>
+                  </li>
+                  <li class="item-list-a">
+                    <i class="fa fa-angle-right"></i> <a href="about.html">About</a>
+                  </li>
+                  <li class="item-list-a">
+                    <i class="fa fa-angle-right"></i> <a href="property-grid.html">Land</a>
+                  </li>
+                  <li class="item-list-a">
+                    <i class="fa fa-angle-right"></i> <a href="blog-grid.html">Gallery</a>
+                  </li>
+                  <li class="item-list-a">
+                    <i class="fa fa-angle-right"></i> <a href="contact.html">Contact</a>
+                  </li>
+                  <li class="item-list-a">
+                    <i class="fa fa-angle-right"></i> <a href="policy.html">Privacy Policy</a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -217,7 +278,7 @@
             </p>
           </div>
           <div class="credits">
-            Designed by <a href="https://courseweb.sliit.lk/">HSAD Students</a>
+                       Designed by <a href="https://courseweb.sliit.lk/">HSAD Students</a>
           </div>
         </div>
       </div>
@@ -242,40 +303,78 @@
   <!-- Template Main Javascript File -->
   <script src="js/main.js"></script>
 
+  <!-- Login Form Validation Script -->
   <script>
-    (function () {
-      var form = document.getElementById('login-form');
-      var error = document.getElementById('login-error');
-      var pwdInput = document.getElementById('login-password');
-      var toggle = document.getElementById('toggle-password');
-
-      if (toggle && pwdInput) {
-        toggle.addEventListener('change', function () {
-          pwdInput.type = toggle.checked ? 'text' : 'password';
-        });
+    function validateLoginForm(event) {
+      event.preventDefault();
+      
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const errorDiv = document.getElementById('errormessage');
+      const successDiv = document.getElementById('sendmessage');
+      const errorText = document.getElementById('errorText');
+      const successText = document.getElementById('successText');
+      
+      // Clear previous messages
+      errorDiv.style.display = 'none';
+      successDiv.style.display = 'none';
+      
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email) {
+        errorText.textContent = 'Email address is required.';
+        errorDiv.style.display = 'block';
+        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return false;
       }
-
-      if (!form || !error) return;
-
-      form.addEventListener('submit', function (evt) {
-        error.textContent = '';
-        error.style.color = '#d9534f';
-
-        if (!form.checkValidity()) {
-          evt.preventDefault();
-          form.reportValidity();
-          return;
-        }
-
-        var pwd = form.elements['password'];
-        if (pwd && pwd.value.length < 8) {
-          evt.preventDefault();
-          error.textContent = 'Password must be at least 8 characters.';
-          pwd.focus();
-          return;
-        }
-      });
-    })();
+      
+      if (!emailRegex.test(email)) {
+        errorText.textContent = 'Please enter a valid email address.';
+        errorDiv.style.display = 'block';
+        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return false;
+      }
+      
+      // Validate password
+      if (!password) {
+        errorText.textContent = 'Password is required.';
+        errorDiv.style.display = 'block';
+        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return false;
+      }
+      
+      if (password.length < 8) {
+        errorText.textContent = 'Password must be at least 8 characters long.';
+        errorDiv.style.display = 'block';
+        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return false;
+      }
+      
+      // Show success message
+      successText.textContent = 'Sign in successful! Redirecting to dashboard...';
+      successDiv.style.display = 'block';
+      successDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      
+      // Simulate successful login (in production, this would submit to a backend)
+      setTimeout(() => {
+        // In a real application, this would redirect to the dashboard or home page
+        // window.location.href = 'dashboard.html';
+        console.log('Login form submitted successfully');
+      }, 2000);
+      
+      return false;
+    }
+    
+    function togglePasswordVisibility() {
+      const passwordField = document.getElementById('password');
+      const showPasswordCheckbox = document.getElementById('showPassword');
+      
+      if (showPasswordCheckbox.checked) {
+        passwordField.type = 'text';
+      } else {
+        passwordField.type = 'password';
+      }
+    }
   </script>
 
 </body>
