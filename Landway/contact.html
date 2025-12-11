@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Contact Us - Landway</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+
+  <!-- Bootstrap CSS File -->
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="lib/animate/animate.min.css" rel="stylesheet">
+
+  <!-- Main Stylesheet File -->
+  <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body class="policy-page">
+
+  <!--/ Nav Star /-->
+  <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
+    <div class="container">
+      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault"
+        aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <a class="navbar-brand text-brand" href="index.html">Land<span class="color-b">way</span></a>
+      <button type="button" class="btn btn-link nav-search navbar-toggle-box-collapse d-md-none" data-toggle="collapse"
+        data-target="#navbarTogglerDemo01" aria-expanded="false">
+        <span class="fa fa-search" aria-hidden="true"></span>
+      </button>
+      <div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="properties.html">Properties</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#gallery">Gallery</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="contact.html">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="login.html">Login</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!--/ Nav End /-->
+
+  <!--/ Contact Header /-->
+  <section class="policy-header contact-header">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h1>Contact Us</h1>
+          <p>We're here to help you find the perfect property. Reach out and let's talk.</p>
+        </div>
+        <div class="col-lg-4 text-lg-right text-left">
+          <a class="btn-b" href="#contact-form">
+            <i class="fa fa-envelope"></i> Make an Inquiry
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--/ Contact Header End /-->
+
+  <!--/ Contact Content /-->
+  <div class="policy-container">
+    <article class="policy-article">
+
+      <!-- Contact Cards -->
+      <section class="policy-section contact-cards-section">
+        <div class="contact-cards">
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fa fa-phone"></i>
+            </div>
+            <h4>Call Us</h4>
+            <p>+1 234 567 8900</p>
+            <p class="muted">Mon - Sat (8:00 AM - 6:00 PM)</p>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fa fa-envelope"></i>
+            </div>
+            <h4>Email</h4>
+            <p>contact@landway.com</p>
+            <p class="muted">We reply within 24 hours</p>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fa fa-map-marker"></i>
+            </div>
+            <h4>Visit Us</h4>
+            <p>123 Maple Street, Springfield</p>
+            <p class="muted">Walk-ins are welcome</p>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fa fa-clock-o"></i>
+            </div>
+            <h4>Working Hours</h4>
+            <p>Mon - Sat: 8:00 AM - 6:00 PM</p>
+            <p class="muted">Sunday by appointment</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Grid -->
+      <section class="policy-section contact-grid" id="contact-form">
+        <div class="row no-gutters">
+          
+          <!-- Contact Form -->
+          <div class="col-lg-7 contact-form-wrapper">
+            <div class="contact-form-card">
+              <h3><i class="fa fa-paper-plane"></i> Send Us a Message</h3>
+              <p class="contact-intro">Tell us more about your inquiry and we'll get back to you shortly.</p>
+              <form class="form-a" onsubmit="handleContactSubmit(event)">
+                <div class="form-a-message" id="contactMessage" style="display: none;"></div>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="contactName">Full Name <span class="required-field">*</span></label>
+                    <input type="text" class="form-control-a" id="contactName" placeholder="John Doe" required>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="contactEmail">Email <span class="required-field">*</span></label>
+                    <input type="email" class="form-control-a" id="contactEmail" placeholder="you@example.com" required>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="contactPhone">Phone <span class="required-field">*</span></label>
+                    <input type="tel" class="form-control-a" id="contactPhone" placeholder="+1 234 567 8900" required>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="contactSubject">Subject <span class="required-field">*</span></label>
+                    <input type="text" class="form-control-a" id="contactSubject" placeholder="I want to list my property" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="contactPropertyType">Property Type (optional)</label>
+                  <select class="form-control-a" id="contactPropertyType">
+                    <option value="">Select a type</option>
+                    <option value="house">House</option>
+                    <option value="land">Land</option>
+                    <option value="apartment">Apartment</option>
+                    <option value="commercial">Commercial</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="contactMessageText">Message <span class="required-field">*</span></label>
+                  <textarea id="contactMessageText" class="form-control-a" rows="5" placeholder="Share more about your inquiry" required></textarea>
+                </div>
+                <button type="submit" class="btn-b">
+                  <i class="fa fa-send"></i> Submit Inquiry
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Contact Info / Map -->
+          <div class="col-lg-5 contact-info-wrapper">
+            <div class="contact-info-card">
+              <h3><i class="fa fa-info-circle"></i> Quick Contact</h3>
+              <ul class="contact-info-list">
+                <li><i class="fa fa-phone"></i> +1 234 567 8900</li>
+                <li><i class="fa fa-envelope"></i> contact@landway.com</li>
+                <li><i class="fa fa-map-marker"></i> 123 Maple Street, Springfield</li>
+                <li><i class="fa fa-clock-o"></i> Mon - Sat: 8:00 AM - 6:00 PM</li>
+              </ul>
+              <a class="btn-outline" href="add-property.html">
+                <i class="fa fa-plus"></i> Add Your Property
+              </a>
+            </div>
+            <div class="map-embed">
+              <iframe title="Landway Office" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345093745!2d144.9537363153159!3d-37.81627977975139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDQ5JzIyLjYiUyAxNDTCsDU3JzE0LjMiRQ!5e0!3m2!1sen!2s!4v00000000000" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </article>
+  </div>
+  <!--/ Contact Content End /-->
+
+  <!--/ footer Star /-->
+  <section class="section-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-md-4">
+          <div class="widget-a">
+            <div class="w-header-a">
+              <h3 class="w-title-a text-brand">Landway</h3>
+            </div>
+            <div class="w-body-a">
+              <p class="w-text-a color-text-a">
+                Your trusted partner in finding the perfect property. We help you discover, buy, and sell properties with confidence.
+              </p>
+            </div>
+            <div class="w-footer-a">
+              <ul class="list-unstyled">
+                <li class="color-a">
+                  <span class="color-text-a">Phone .</span> contact@landway.com</li>
+                <li class="color-a">
+                  <span class="color-text-a">Email .</span> +1 234 567 8900</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-4 section-md-t3">
+          <div class="widget-a">
+            <div class="w-header-a">
+              <h3 class="w-title-a text-brand">Quick Links</h3>
+            </div>
+            <div class="w-body-a">
+              <div class="w-body-a">
+                <ul class="list-unstyled">
+                  <li class="item-list-a">
+                    <i class="fa fa-angle-right"></i> <a href="index.html">Home</a>
+                  </li>
+                  <li class="item-list-a">
+                    <i class="fa fa-angle-right"></i> <a href="#about">About Us</a>
+                  </li>
+                  <li class="item-list-a">
+                    <i class="fa fa-angle-right"></i> <a href="properties.html">Properties</a>
+                  </li>
+                  <li class="item-list-a">
+                    <i class="fa fa-angle-right"></i> <a href="contact.html">Contact</a>
+                  </li>
+                  <li class="item-list-a">
+                    <i class="fa fa-angle-right"></i> <a href="policy.html">Privacy Policy</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-4 section-md-t3">
+          <div class="widget-a">
+            <div class="w-header-a">
+              <h3 class="w-title-a text-brand">Connect With Us</h3>
+            </div>
+            <div class="w-body-a">
+              <p class="w-text-a color-text-a">
+                Follow us on social media for the latest property listings and updates.
+              </p>
+              <ul class="list-unstyled">
+                <li class="item-list-a">
+                  <i class="fa fa-facebook"></i> <a href="#">Facebook</a>
+                </li>
+                <li class="item-list-a">
+                  <i class="fa fa-twitter"></i> <a href="#">Twitter</a>
+                </li>
+                <li class="item-list-a">
+                  <i class="fa fa-instagram"></i> <a href="#">Instagram</a>
+                </li>
+                <li class="item-list-a">
+                  <i class="fa fa-linkedin"></i> <a href="#">LinkedIn</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <nav class="nav-footer">
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <a href="index.html">Home</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#about">About</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="properties.html">Properties</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="contact.html">Contact</a>
+              </li>
+            </ul>
+          </nav>
+          <div class="socials-a">
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fa fa-facebook" aria-hidden="true"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fa fa-instagram" aria-hidden="true"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fa fa-linkedin" aria-hidden="true"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="copyright-footer">
+            <p class="copyright color-text-a">
+              &copy; Copyright 2024
+              <span class="color-a">Landway</span> All Rights Reserved.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!--/ Footer End /-->
+
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+  <!-- JavaScript Libraries -->
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/jquery/jquery-migrate.min.js"></script>
+  <script src="lib/popper/popper.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="js/main.js"></script>
+
+  <!-- Contact Page JavaScript -->
+  <script>
+    function handleContactSubmit(event) {
+      event.preventDefault();
+      const messageBox = document.getElementById('contactMessage');
+      const requiredFields = ['contactName', 'contactEmail', 'contactPhone', 'contactSubject', 'contactMessageText'];
+      let isValid = true;
+
+      requiredFields.forEach(id => {
+        const input = document.getElementById(id);
+        if (!input.value.trim()) {
+          isValid = false;
+          input.classList.add('error');
+        } else {
+          input.classList.remove('error');
+        }
+      });
+
+      if (!isValid) {
+        messageBox.className = 'form-a-message error';
+        messageBox.textContent = 'Please fill in all required fields.';
+        messageBox.style.display = 'block';
+        return;
+      }
+
+      messageBox.className = 'form-a-message success';
+      messageBox.textContent = 'Thank you! Your inquiry has been sent successfully.';
+      messageBox.style.display = 'block';
+      event.target.reset();
+    }
+
+    document.querySelectorAll('.form-control-a').forEach(input => {
+      input.addEventListener('input', function() {
+        this.classList.remove('error');
+      });
+    });
+  </script>
+
+</body>
+</html>
