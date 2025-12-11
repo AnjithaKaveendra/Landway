@@ -14,319 +14,269 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
 
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Login - Land Way</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+  <!-- Bootstrap CSS File -->
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Favicons -->
-    <link href="img/favicon.png" rel="icon">
-    <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+  <!-- Libraries CSS Files -->
+  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="lib/animate/animate.min.css" rel="stylesheet">
+  <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+  <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+  <!-- Main Stylesheet File -->
+  <link href="css/style.css" rel="stylesheet">
 
-    <!-- Bootstrap CSS File -->
-    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
 
-    <!-- Libraries CSS Files -->
-    <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+<body class="login-page">
 
-    <!-- Main Stylesheet File -->
-    <link href="css/style.css" rel="stylesheet">
+  <!-- Login Header -->
+  <div class="policy-header">
+    <h1>Sign In to Your Account</h1>
+    <p class="lead">Access your Land Way account to manage your property listings and offers.</p>
+  </div>
 
-  </head>
+  <!-- Login Content -->
+  <main class="policy-container">
+    <article class="policy-article">
+      <section class="policy-section">
+        <h2 class="policy-section-title">Welcome Back</h2>
+        <p>Enter your credentials to access your account and continue managing your property listings.</p>
 
-  <body class="login-page">
+        <form id="login-form" action="#" novalidate>
+          <div style="margin-bottom: 20px;">
+            <label class="details" for="login-email" style="display: block; font-weight: 600; color: #0f1d2b; margin-bottom: 8px;">Email Address</label>
+            <input id="login-email" name="email" type="email" placeholder="example@email.com" autocomplete="email" required
+              style="width: 100%; padding: 12px 14px; border: 1px solid #e8ecf1; border-radius: 8px; font-size: 14px; color: #0f1d2b; font-family: Poppins;">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label class="details" for="login-password" style="display: block; font-weight: 600; color: #0f1d2b; margin-bottom: 8px;">Password</label>
+            <input id="login-password" name="password" type="password" minlength="8" maxlength="32" placeholder="••••••••" autocomplete="current-password" required
+              style="width: 100%; padding: 12px 14px; border: 1px solid #e8ecf1; border-radius: 8px; font-size: 14px; color: #0f1d2b; font-family: Poppins;">
+          </div>
 
-    <!-- Navbar Start -->
-    <nav class="navbar navbar-expand-lg navbar-light navbar-default navbar-fixed-top">
-      <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDefault"
-          aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand text-brand" href="index.html">Land<span class="color-b">Way</span></a>
-        <div class="navbar-collapse collapse" id="navbarDefault">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="about.html">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="property-grid.html">Land</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="blog-grid.html">Gallery</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="contact.html">Contact</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="policy.html">Privacy</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-    <!--/ Navbar End /-->
+          <label style="margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; color: #516072; cursor: pointer;">
+            <input type="checkbox" id="toggle-password"> <span>Show password</span>
+          </label>
 
-    <!-- Login Header -->
-    <div class="policy-header">
-      <h1>Sign In to Your Account</h1>
-      <p class="lead">Access your Land Way account to manage your property listings and offers.</p>
-    </div>
-
-    <!-- Login Content -->
-    <main class="policy-container">
-      <article class="policy-article">
-        <section class="policy-section">
-          <h2 class="policy-section-title">Welcome Back</h2>
-          <p>Enter your credentials to access your account and continue managing your property listings.</p>
-
-          <form id="login-form" action="#" novalidate>
-            <div style="margin-bottom: 20px;">
-              <label class="details" for="login-email" style="display: block; font-weight: 600; color: #0f1d2b; margin-bottom: 8px;">Email Address</label>
-              <input id="login-email" name="email" type="email" placeholder="example@email.com" autocomplete="email" required
-                style="width: 100%; padding: 12px 14px; border: 1px solid #e8ecf1; border-radius: 8px; font-size: 14px; color: #0f1d2b; font-family: Poppins;">
-            </div>
-            <div style="margin-bottom: 20px;">
-              <label class="details" for="login-password" style="display: block; font-weight: 600; color: #0f1d2b; margin-bottom: 8px;">Password</label>
-              <input id="login-password" name="password" type="password" minlength="8" maxlength="32" placeholder="••••••••" autocomplete="current-password" required
-                style="width: 100%; padding: 12px 14px; border: 1px solid #e8ecf1; border-radius: 8px; font-size: 14px; color: #0f1d2b; font-family: Poppins;">
-            </div>
-
-            <label style="margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; color: #516072; cursor: pointer;">
-              <input type="checkbox" id="toggle-password"> <span>Show password</span>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+            <label style="display: inline-flex; align-items: center; gap: 8px; margin: 0; color: #516072; cursor: pointer;">
+              <input type="checkbox" name="remember" aria-label="Remember me"> <span>Remember me</span>
             </label>
-
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
-              <label style="display: inline-flex; align-items: center; gap: 8px; margin: 0; color: #516072; cursor: pointer;">
-                <input type="checkbox" name="remember" aria-label="Remember me"> <span>Remember me</span>
-              </label>
-              <a href="#" style="color: #2eca6a; text-decoration: none; font-weight: 600;">Forgot password?</a>
-            </div>
-
-            <div id="login-error" class="auth-helper" aria-live="polite" style="color: #d9534f; font-weight: 600; min-height: 20px; margin-bottom: 20px;"></div>
-
-            <button class="button" type="submit" style="width: 100%; padding: 14px; background: #2eca6a; border: none; color: #ffffff; font-weight: 600; border-radius: 8px; cursor: pointer; margin-bottom: 20px; transition: all 0.3s ease; font-size: 16px; font-family: Poppins;">Sign In</button>
-
-            <p style="text-align: center; color: #516072; margin: 0;">Don't have an account? <a href="Land Way/new 1.html" style="color: #2eca6a; text-decoration: none; font-weight: 600;">Create one</a></p>
-          </form>
-        </section>
-      </article>
-    </main>
-
-    <!--/ footer Start /-->
-    <section class="section-footer">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12 col-md-4">
-            <div class="widget-a">
-              <div class="w-header-a">
-                <h3 class="w-title-a text-brand">Land Way</h3>
-              </div>
-              <div class="w-body-a">
-                <p class="w-text-a color-text-a">
-                  Efficient platform for buying a land. It
-                  simplifies the process with features like
-                  digital contract signing, secure payments,
-                  and legal compliance, ensuring smooth
-                  transactions.
-                </p>
-              </div>
-              <div class="w-footer-a">
-                <ul class="list-unstyled">
-                  <li class="color-a">
-                    <span class="color-text-a">Email .</span> contact@hsad.com
-                  </li>
-                  <li class="color-a">
-                    <span class="color-text-a">Phone .</span> +54 356 945234
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <a href="#" style="color: #2eca6a; text-decoration: none; font-weight: 600;">Forgot password?</a>
           </div>
-          <div class="col-sm-12 col-md-4 section-md-t3">
-            <div class="widget-a">
-              <div class="w-header-a">
-                <h3 class="w-title-a text-brand">The Company</h3>
-              </div>
-              <div class="w-body-a">
-                <ul class="list-unstyled">
-                  <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="index.html">Home</a>
-                  </li>
-                  <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="about.html">About</a>
-                  </li>
-                  <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="property-grid.html">Land</a>
-                  </li>
-                  <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="blog-grid.html">Gallery</a>
-                  </li>
-                  <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="contact.html">Contact</a>
-                  </li>
-                  <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="policy.html">Privacy Policy</a>
-                  </li>
-                </ul>
-              </div>
+
+          <div id="login-error" class="auth-helper" aria-live="polite" style="color: #d9534f; font-weight: 600; min-height: 20px; margin-bottom: 20px;"></div>
+
+          <button class="button" type="submit" style="width: 100%; padding: 14px; background: #2eca6a; border: none; color: #ffffff; font-weight: 600; border-radius: 8px; cursor: pointer; margin-bottom: 20px; transition: all 0.3s ease; font-size: 16px; font-family: Poppins;">Sign In</button>
+
+          <p style="text-align: center; color: #516072; margin: 0;">Don't have an account? <a href="Land Way/new 1.html" style="color: #2eca6a; text-decoration: none; font-weight: 600;">Create one</a></p>
+        </form>
+      </section>
+    </article>
+  </main>
+
+  <!--/ footer Start /-->
+  <section class="section-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-md-4">
+          <div class="widget-a">
+            <div class="w-header-a">
+              <h3 class="w-title-a text-brand">Land Way</h3>
             </div>
-          </div>
-          <div class="col-sm-12 col-md-4 section-md-t3">
-            <div class="widget-a">
-              <div class="w-header-a">
-                <h3 class="w-title-a text-brand">International sites</h3>
-              </div>
-              <div class="w-body-a">
-                <ul class="list-unstyled">
-                  <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="#">America</a>
-                  </li>
-                  <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="#">Mexico</a>
-                  </li>
-                  <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="#">Canada</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <nav class="nav-footer">
-              <ul class="list-inline">
-                <li class="list-inline-item">
-                  <a href="index.html">Home</a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="about.html">About</a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="property-grid.html">Land</a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="blog-grid.html">Gallery</a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="contact.html">Contact</a>
-                </li>
-              </ul>
-            </nav>
-            <div class="socials-a">
-              <ul class="list-inline">
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fa fa-facebook" aria-hidden="true"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fa fa-twitter" aria-hidden="true"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fa fa-instagram" aria-hidden="true"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fa fa-pinterest-p" aria-hidden="true"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#">
-                    <i class="fa fa-dribbble" aria-hidden="true"></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div class="copyright-footer">
-              <p class="copyright color-text-a">
-                &copy; Copyright
-                <span class="color-a">HSAD Students</span> All Rights Reserved.
+            <div class="w-body-a">
+              <p class="w-text-a color-text-a">
+                Efficient platform for buying a land. It
+                simplifies the process with features like
+                digital contract signing, secure payments,
+                and legal compliance, ensuring smooth
+                transactions.
               </p>
             </div>
-            <div class="credits">
-              Designed by <a href="https://courseweb.sliit.lk/">HSAD Students</a>
+            <div class="w-footer-a">
+              <ul class="list-unstyled">
+                <li class="color-a">
+                  <span class="color-text-a">Email .</span> contact@hsad.com
+                </li>
+                <li class="color-a">
+                  <span class="color-text-a">Phone .</span> +54 356 945234
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-4 section-md-t3">
+          <div class="widget-a">
+            <div class="w-header-a">
+              <h3 class="w-title-a text-brand">The Company</h3>
+            </div>
+            <div class="w-body-a">
+              <ul class="list-unstyled">
+                <li class="item-list-a">
+                  <i class="fa fa-angle-right"></i> <a href="index.html">Home</a>
+                </li>
+                <li class="item-list-a">
+                  <i class="fa fa-angle-right"></i> <a href="about.html">About</a>
+                </li>
+                <li class="item-list-a">
+                  <i class="fa fa-angle-right"></i> <a href="property-grid.html">Land</a>
+                </li>
+                <li class="item-list-a">
+                  <i class="fa fa-angle-right"></i> <a href="blog-grid.html">Gallery</a>
+                </li>
+                <li class="item-list-a">
+                  <i class="fa fa-angle-right"></i> <a href="contact.html">Contact</a>
+                </li>
+                <li class="item-list-a">
+                  <i class="fa fa-angle-right"></i> <a href="policy.html">Privacy Policy</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-4 section-md-t3">
+          <div class="widget-a">
+            <div class="w-header-a">
+              <h3 class="w-title-a text-brand">International sites</h3>
+            </div>
+            <div class="w-body-a">
+              <ul class="list-unstyled">
+                <li class="item-list-a">
+                  <i class="fa fa-angle-right"></i> <a href="#">America</a>
+                </li>
+                <li class="item-list-a">
+                  <i class="fa fa-angle-right"></i> <a href="#">Mexico</a>
+                </li>
+                <li class="item-list-a">
+                  <i class="fa fa-angle-right"></i> <a href="#">Canada</a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
-    </footer>
-    <!--/ Footer End /-->
+    </div>
+  </section>
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <nav class="nav-footer">
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <a href="index.html">Home</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="about.html">About</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="property-grid.html">Land</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="blog-grid.html">Gallery</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="contact.html">Contact</a>
+              </li>
+            </ul>
+          </nav>
+          <div class="socials-a">
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fa fa-facebook" aria-hidden="true"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fa fa-instagram" aria-hidden="true"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fa fa-pinterest-p" aria-hidden="true"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fa fa-dribbble" aria-hidden="true"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="copyright-footer">
+            <p class="copyright color-text-a">
+              &copy; Copyright
+              <span class="color-a">HSAD Students</span> All Rights Reserved.
+            </p>
+          </div>
+          <div class="credits">
+            Designed by <a href="https://courseweb.sliit.lk/">HSAD Students</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!--/ Footer End /-->
 
-    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
-    <div id="preloader"></div>
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+  <div id="preloader"></div>
 
-    <!-- JavaScript Libraries -->
-    <script src="lib/jquery/jquery.min.js"></script>
-    <script src="lib/jquery/jquery-migrate.min.js"></script>
-    <script src="lib/popper/popper.min.js"></script>
-    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/scrollreveal/scrollreveal.min.js"></script>
-    <!-- Contact Form JavaScript File -->
-    <script src="contactform/contactform.js"></script>
+  <!-- JavaScript Libraries -->
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/jquery/jquery-migrate.min.js"></script>
+  <script src="lib/popper/popper.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+  <script src="lib/scrollreveal/scrollreveal.min.js"></script>
+  <!-- Contact Form JavaScript File -->
+  <script src="contactform/contactform.js"></script>
 
-    <!-- Template Main Javascript File -->
-    <script src="js/main.js"></script>
+  <!-- Template Main Javascript File -->
+  <script src="js/main.js"></script>
 
-    <script>
-      (function () {
-        var form = document.getElementById('login-form');
-        var error = document.getElementById('login-error');
-        var pwdInput = document.getElementById('login-password');
-        var toggle = document.getElementById('toggle-password');
+  <script>
+    (function () {
+      var form = document.getElementById('login-form');
+      var error = document.getElementById('login-error');
+      var pwdInput = document.getElementById('login-password');
+      var toggle = document.getElementById('toggle-password');
 
-        if (toggle && pwdInput) {
-          toggle.addEventListener('change', function () {
-            pwdInput.type = toggle.checked ? 'text' : 'password';
-          });
+      if (toggle && pwdInput) {
+        toggle.addEventListener('change', function () {
+          pwdInput.type = toggle.checked ? 'text' : 'password';
+        });
+      }
+
+      if (!form || !error) return;
+
+      form.addEventListener('submit', function (evt) {
+        error.textContent = '';
+        error.style.color = '#d9534f';
+
+        if (!form.checkValidity()) {
+          evt.preventDefault();
+          form.reportValidity();
+          return;
         }
 
-        if (!form || !error) return;
+        var pwd = form.elements['password'];
+        if (pwd && pwd.value.length < 8) {
+          evt.preventDefault();
+          error.textContent = 'Password must be at least 8 characters.';
+          pwd.focus();
+          return;
+        }
+      });
+    })();
+  </script>
 
-        form.addEventListener('submit', function (evt) {
-          error.textContent = '';
-          error.style.color = '#d9534f';
-
-          if (!form.checkValidity()) {
-            evt.preventDefault();
-            form.reportValidity();
-            return;
-          }
-
-          var pwd = form.elements['password'];
-          if (pwd && pwd.value.length < 8) {
-            evt.preventDefault();
-            error.textContent = 'Password must be at least 8 characters.';
-            pwd.focus();
-            return;
-          }
-        });
-      })();
-    </script>
-
-  </body>
-  </html>
+</body>
+</html>
