@@ -2040,7 +2040,8 @@ footer .credits {
 }
 
 /* Styles for employee registration page */
-body.registration-page {
+body.registration-page,
+body.login-page {
   min-height: 100vh;
   display: flex;
   align-items: flex-start;
@@ -2152,5 +2153,10 @@ body.registration-page {
 #message {
   display: block;
   margin-top: 6px;
+  font-weight: 600;
+}
+
+.helper-text {
+  margin-top: 8px;
   font-weight: 600;
 }
