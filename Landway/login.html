@@ -40,39 +40,50 @@
     </div>
   </nav>
 
-  <div class="registration-shell" style="margin-top: 100px;">
-    <div class="registration-visual" aria-hidden="true"></div>
+  <main class="auth-layout">
+    <section class="auth-visual" aria-hidden="true">
+      <h1>Welcome back.</h1>
+      <p>Access your dashboard, manage listings, and track offers in one secure place.</p>
+      <ul class="auth-bullets">
+        <li><span class="auth-bullet-icon">✓</span>Secure SSO-ready login</li>
+        <li><span class="auth-bullet-icon">✓</span>One place for all your land deals</li>
+        <li><span class="auth-bullet-icon">✓</span>Quick access on any device</li>
+      </ul>
+    </section>
 
-    <div class="registration-card">
+    <section class="auth-card" aria-label="Login form">
       <div class="title">Employee Login</div>
-      <p class="color-text-a" style="margin-top: 4px;">Sign in with your credentials to continue.</p>
+      <p class="auth-subtitle">Sign in with your credentials to continue.</p>
       <form id="login-form" action="#" novalidate>
-        <div class="employee_details" style="margin-top: 16px;">
+        <div class="employee_details">
           <div class="input_box">
             <label class="details" for="login-email">Email</label>
-            <input id="login-email" name="email" type="email" placeholder="Enter your email" required>
+            <input id="login-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
           </div>
           <div class="input_box">
             <label class="details" for="login-password">Password</label>
-            <input id="login-password" name="password" type="password" minlength="8" maxlength="32" placeholder="Enter your password" required>
+            <input id="login-password" name="password" type="password" minlength="8" maxlength="32" placeholder="Enter your password" autocomplete="current-password" required>
+            <label class="password-toggle" for="toggle-password">
+              <input type="checkbox" id="toggle-password"> Show password
+            </label>
           </div>
         </div>
 
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
-          <label style="display: flex; align-items: center; gap: 8px; margin: 0;">
+        <div class="auth-actions">
+          <label style="display: inline-flex; align-items: center; gap: 8px; margin: 0;">
             <input type="checkbox" name="remember" aria-label="Remember me">
             <span>Remember me</span>
           </label>
-          <a href="#" class="link-one">Forgot password?</a>
+          <a href="#">Forgot password?</a>
         </div>
 
-        <div id="login-error" class="helper-text" aria-live="polite"></div>
+        <div id="login-error" class="auth-helper" aria-live="polite"></div>
 
         <button class="button" type="submit">Login</button>
-        <p style="margin-top: 16px; margin-bottom: 0;">Don't have an account? <a href="new 1.html">Register</a></p>
+        <p style="margin-top: 14px; margin-bottom: 0; color: #516072;">Don't have an account? <a href="new 1.html">Register</a></p>
       </form>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <section class="section-footer">
     <div class="container">
@@ -173,10 +184,20 @@
     (function () {
       var form = document.getElementById('login-form');
       var error = document.getElementById('login-error');
+      var pwdInput = document.getElementById('login-password');
+      var toggle = document.getElementById('toggle-password');
+
+      if (toggle && pwdInput) {
+        toggle.addEventListener('change', function () {
+          pwdInput.type = toggle.checked ? 'text' : 'password';
+        });
+      }
+
       if (!form || !error) return;
 
       form.addEventListener('submit', function (evt) {
         error.textContent = '';
+        error.style.color = '#d9534f';
 
         if (!form.checkValidity()) {
           evt.preventDefault();
@@ -187,7 +208,6 @@
         var pwd = form.elements['password'];
         if (pwd && pwd.value.length < 8) {
           evt.preventDefault();
-          error.style.color = 'red';
           error.textContent = 'Password must be at least 8 characters.';
           pwd.focus();
           return;
