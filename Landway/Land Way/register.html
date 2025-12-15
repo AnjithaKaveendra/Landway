@@ -114,12 +114,6 @@
             <input type="tel" id="phone" class="form-control form-control-a" placeholder="+54 356 945234" pattern="[0-9+\-\s]+" required>
           </div>
 
-          <!-- Employee ID Field -->
-          <div class="form-group">
-            <label for="employee-id">Employee ID <span class="required-field">*</span></label>
-            <input type="text" id="employee-id" class="form-control form-control-a" placeholder="EMP001" required>
-          </div>
-
           <!-- Password Field -->
           <div class="form-group">
             <label for="pwd">Password <span class="required-field">*</span></label>
@@ -367,7 +361,6 @@
       const lastName = document.getElementById('last-name').value.trim();
       const email = document.getElementById('email').value.trim();
       const phone = document.getElementById('phone').value.trim();
-      const employeeId = document.getElementById('employee-id').value.trim();
       const password = document.getElementById('pwd').value.trim();
       const confirmPassword = document.getElementById('con_pwd').value.trim();
       const errorDiv = document.getElementById('errormessage');
@@ -409,13 +402,6 @@
         return false;
       }
       
-      if (!employeeId) {
-        errorText.textContent = 'Employee ID is required.';
-        errorDiv.style.display = 'block';
-        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        return false;
-      }
-      
       if (!password || password.length < 8) {
         errorText.textContent = 'Password must be at least 8 characters long.';
         errorDiv.style.display = 'block';
@@ -430,14 +416,37 @@
         return false;
       }
       
+      // Save to localStorage
+      const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+      
+      // Check if email already exists
+      if (registeredUsers.some(user => user.email === email)) {
+        errorText.textContent = 'This email is already registered.';
+        errorDiv.style.display = 'block';
+        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return false;
+      }
+      
+      const newUser = {
+        firstName,
+        lastName,
+        email,
+        phone,
+        password,
+        registrationDate: new Date().toISOString()
+      };
+      
+      registeredUsers.push(newUser);
+      localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+      
       // Show success message
       successText.textContent = 'Registration successful! Redirecting to login...';
       successDiv.style.display = 'block';
       successDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       
-      // Simulate successful registration
+      // Redirect to login after 2 seconds
       setTimeout(() => {
-        console.log('Registration form submitted successfully');
+        window.location.href = '../login.html';
       }, 2000);
       
       return false;

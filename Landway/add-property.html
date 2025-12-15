@@ -666,33 +666,36 @@
         features.push(checkbox.value);
       });
       
-      // In a real application, this would send data to a server
-      console.log('Property Data:', {
-        title: formData.get('propertyTitle'),
-        type: formData.get('propertyType'),
-        status: formData.get('propertyStatus'),
-        description: formData.get('propertyDescription'),
-        address: formData.get('propertyAddress'),
-        city: formData.get('propertyCity'),
-        state: formData.get('propertyState'),
-        zipCode: formData.get('propertyZipCode'),
-        country: formData.get('propertyCountry'),
-        bedrooms: formData.get('propertyBedrooms'),
-        bathrooms: formData.get('propertyBathrooms'),
-        area: formData.get('propertyArea'),
-        yearBuilt: formData.get('propertyYearBuilt'),
-        garage: formData.get('propertyGarage'),
-        price: formData.get('propertyPrice'),
-        currency: formData.get('propertyCurrency'),
+      // Create property object
+      const property = {
+        propertyTitle: formData.get('propertyTitle'),
+        propertyType: formData.get('propertyType'),
+        propertyStatus: formData.get('propertyStatus'),
+        propertyDescription: formData.get('propertyDescription'),
+        propertyAddress: formData.get('propertyAddress'),
+        propertyCity: formData.get('propertyCity'),
+        propertyState: formData.get('propertyState'),
+        propertyZipCode: formData.get('propertyZipCode'),
+        propertyCountry: formData.get('propertyCountry'),
+        propertyBedrooms: formData.get('propertyBedrooms'),
+        propertyBathrooms: formData.get('propertyBathrooms'),
+        propertyArea: formData.get('propertyArea'),
+        propertyYearBuilt: formData.get('propertyYearBuilt'),
+        propertyGarage: formData.get('propertyGarage'),
+        propertyPrice: formData.get('propertyPrice'),
+        propertyCurrency: formData.get('propertyCurrency'),
         features: features,
-        images: imagesInput.files.length,
-        owner: {
-          name: formData.get('ownerName'),
-          email: formData.get('ownerEmail'),
-          phone: formData.get('ownerPhone'),
-          whatsapp: formData.get('ownerWhatsApp')
-        }
-      });
+        ownerName: formData.get('ownerName'),
+        ownerEmail: formData.get('ownerEmail'),
+        ownerPhone: formData.get('ownerPhone'),
+        ownerWhatsApp: formData.get('ownerWhatsApp'),
+        listedDate: new Date().toISOString()
+      };
+      
+      // Save to localStorage
+      const properties = JSON.parse(localStorage.getItem('properties')) || [];
+      properties.push(property);
+      localStorage.setItem('properties', JSON.stringify(properties));
       
       // Show success message
       messageDiv.className = 'form-a-message success';

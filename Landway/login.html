@@ -344,17 +344,73 @@
         return false;
       }
       
-      // Show success message
-      successText.textContent = 'Sign in successful! Redirecting to dashboard...';
+      // Check for admin login
+      const adminCredentials = {
+        email: 'admin@landway.com',
+        password: 'Admin123456'
+      };
+      
+      if (email === adminCredentials.email && password === adminCredentials.password) {
+        // Admin login successful
+        successText.textContent = 'Admin login successful! Redirecting to dashboard...';
+        successDiv.style.display = 'block';
+        successDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        
+        // Store admin session
+        const adminSession = {
+          isAdmin: true,
+          firstName: 'Admin',
+          lastName: 'User',
+          email: email,
+          password: password,
+          loginDate: new Date().toISOString()
+        };
+        
+        localStorage.setItem('adminSession', JSON.stringify(adminSession));
+        
+        setTimeout(() => {
+          window.location.href = 'admin-dashboard.html';
+        }, 1500);
+        return false;
+      }
+      
+      // Check for regular user login
+      const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+      const user = registeredUsers.find(u => u.email === email);
+      
+      if (!user) {
+        errorText.textContent = 'Email not found. Please register first.';
+        errorDiv.style.display = 'block';
+        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return false;
+      }
+      
+      if (user.password !== password) {
+        errorText.textContent = 'Incorrect password. Please try again.';
+        errorDiv.style.display = 'block';
+        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return false;
+      }
+      
+      // Regular user login successful
+      successText.textContent = 'Sign in successful! Redirecting...';
       successDiv.style.display = 'block';
       successDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       
-      // Simulate successful login (in production, this would submit to a backend)
+      // Store user session
+      const userSession = {
+        isAdmin: false,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        loginDate: new Date().toISOString()
+      };
+      
+      localStorage.setItem('userSession', JSON.stringify(userSession));
+      
       setTimeout(() => {
-        // In a real application, this would redirect to the dashboard or home page
-        // window.location.href = 'dashboard.html';
-        console.log('Login form submitted successfully');
-      }, 2000);
+        window.location.href = 'index.html';
+      }, 1500);
       
       return false;
     }

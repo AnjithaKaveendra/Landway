@@ -372,6 +372,30 @@
         return;
       }
 
+      // Get form data
+      const contactName = document.getElementById('contactName').value.trim();
+      const contactEmail = document.getElementById('contactEmail').value.trim();
+      const contactPhone = document.getElementById('contactPhone').value.trim();
+      const contactSubject = document.getElementById('contactSubject').value.trim();
+      const contactPropertyType = document.getElementById('contactPropertyType').value;
+      const contactMessageText = document.getElementById('contactMessageText').value.trim();
+
+      // Save to localStorage
+      const inquiries = JSON.parse(localStorage.getItem('inquiries')) || [];
+      
+      const newInquiry = {
+        contactName,
+        contactEmail,
+        contactPhone,
+        contactSubject,
+        contactPropertyType,
+        contactMessageText,
+        inquiryDate: new Date().toISOString()
+      };
+
+      inquiries.push(newInquiry);
+      localStorage.setItem('inquiries', JSON.stringify(inquiries));
+
       messageBox.className = 'form-a-message success';
       messageBox.textContent = 'Thank you! Your inquiry has been sent successfully.';
       messageBox.style.display = 'block';
