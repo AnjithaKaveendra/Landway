@@ -1,0 +1,1 @@
+<footer><div class="container"><p>&copy; <?= date('Y') ?> Landway. All rights reserved.</p><p><a href="properties.php">Properties</a> &middot; <a href="contact.php">Contact</a> &middot; <a href="policy.php">Privacy Policy</a></p></div></footer>

@@ -1,6 +1,9 @@
+<?php require_once __DIR__ . '/app.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="csrf-token" content="<?= e($_SESSION['csrfToken']) ?>">
+  <script src="js/api.js"></script>
   <meta charset="utf-8">
   <title>Privacy Policy - Land Way</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -32,37 +35,7 @@
 <body class="policy-page">
 
   <!-- Navbar Start -->
-  <nav class="navbar navbar-expand-lg navbar-light navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDefault"
-        aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <a class="navbar-brand text-brand" href="index.html">Land<span class="color-b">Way</span></a>
-      <div class="navbar-collapse collapse" id="navbarDefault">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="index.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="about.html">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="properties.html">Properties</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#gallery">Gallery</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="contact.html">Contact</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="login.html">Login</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <?php require __DIR__ . '/includes/nav.php'; ?>
   <!--/ Navbar End /-->
   <!-- Policy Header -->
   <div class="policy-header">
@@ -179,19 +152,19 @@
               <div class="w-body-a">
                 <ul class="list-unstyled">
                   <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="index.html">Home</a>
+                    <i class="fa fa-angle-right"></i> <a href="index.php">Home</a>
                   </li>
                   <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="about.html">About Us</a>
+                    <i class="fa fa-angle-right"></i> <a href="about.php">About Us</a>
                   </li>
                   <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="properties.html">Properties</a>
+                    <i class="fa fa-angle-right"></i> <a href="properties.php">Properties</a>
                   </li>
                   <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="contact.html">Contact</a>
+                    <i class="fa fa-angle-right"></i> <a href="contact.php">Contact</a>
                   </li>
                   <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="policy.html">Privacy Policy</a>
+                    <i class="fa fa-angle-right"></i> <a href="policy.php">Privacy Policy</a>
                   </li>
                 </ul>
               </div>
@@ -228,16 +201,16 @@
           <nav class="nav-footer">
             <ul class="list-inline">
               <li class="list-inline-item">
-                <a href="index.html">Home</a>
+                <a href="index.php">Home</a>
               </li>
               <li class="list-inline-item">
-                <a href="about.html">About</a>
+                <a href="about.php">About</a>
               </li>
               <li class="list-inline-item">
-                <a href="properties.html">Properties</a>
+                <a href="properties.php">Properties</a>
               </li>
               <li class="list-inline-item">
-                <a href="contact.html">Contact</a>
+                <a href="contact.php">Contact</a>
               </li>
             </ul>
           </nav>
@@ -297,7 +270,7 @@
   <script src="lib/owlcarousel/owl.carousel.min.js"></script>
   <script src="lib/scrollreveal/scrollreveal.min.js"></script>
   <!-- Contact Form JavaScript File -->
-  <script src="contactform/contactform.js"></script>
+
 
   <!-- Template Main Javascript File -->
   <script src="js/main.js"></script>

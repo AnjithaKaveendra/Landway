@@ -1,3 +1,10 @@
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[char]));
+}
+function escapedRecord(record) {
+  return Object.fromEntries(Object.entries(record).map(([key, value]) => [key,
+    Array.isArray(value) ? value.map(escapeHtml) : typeof value === 'string' ? escapeHtml(value) : value]));
+}
 // Admin Dashboard JavaScript - Database Version
 
 let currentAccountId = null;
@@ -29,6 +36,7 @@ function loadAccounts() {
       if (data.status === 'success' && data.data.length > 0) {
         tableBody.innerHTML = '';
         data.data.forEach((account, index) => {
+          account = escapedRecord(account);
           const registrationDate = new Date(account.registrationDate).toLocaleDateString();
           const row = document.createElement('tr');
           row.innerHTML = `
@@ -62,7 +70,7 @@ function viewAccount(id) {
     .then(response => response.json())
     .then(data => {
       if (data.status === 'success') {
-        const account = data.data;
+        const account = escapedRecord(data.data);
         currentAccountId = id;
         
         const detailsHtml = `
@@ -121,6 +129,7 @@ function loadProperties() {
       if (data.status === 'success' && data.data.length > 0) {
         tableBody.innerHTML = '';
         data.data.forEach((property) => {
+          property = escapedRecord(property);
           const statusText = property.propertyStatus === 'sale' ? 'For Sale' : 
                              (property.propertyStatus === 'rent' ? 'For Rent' : 'For Lease');
           const location = property.propertyCity || property.propertyAddress || 'N/A';
@@ -164,7 +173,7 @@ function viewProperty(id) {
     .then(response => response.json())
     .then(data => {
       if (data.status === 'success') {
-        const property = data.data;
+        const property = escapedRecord(data.data);
         currentPropertyId = id;
         
         const statusText = property.propertyStatus === 'sale' ? 'For Sale' : 
@@ -241,6 +250,7 @@ function loadInquiries() {
       if (data.status === 'success' && data.data.length > 0) {
         tableBody.innerHTML = '';
         data.data.forEach((inquiry) => {
+          inquiry = escapedRecord(inquiry);
           const inquiryDate = new Date(inquiry.inquiryDate).toLocaleDateString();
           const row = document.createElement('tr');
           row.innerHTML = `
@@ -275,7 +285,7 @@ function viewInquiry(id) {
     .then(response => response.json())
     .then(data => {
       if (data.status === 'success') {
-        const inquiry = data.data;
+        const inquiry = escapedRecord(data.data);
         currentInquiryId = id;
         
         const detailsHtml = `
@@ -336,6 +346,7 @@ function loadEmployees() {
       if (data.status === 'success' && data.data.length > 0) {
         tableBody.innerHTML = '';
         data.data.forEach((employee) => {
+          employee = escapedRecord(employee);
           const hireDate = employee.hireDate ? new Date(employee.hireDate).toLocaleDateString() : 'N/A';
           const row = document.createElement('tr');
           row.innerHTML = `
@@ -371,7 +382,7 @@ function viewEmployee(id) {
     .then(response => response.json())
     .then(data => {
       if (data.status === 'success') {
-        const employee = data.data;
+        const employee = escapedRecord(data.data);
         const hireDate = employee.hireDate ? new Date(employee.hireDate).toLocaleDateString() : 'N/A';
         
         const detailsHtml = `
@@ -566,8 +577,8 @@ function logoutAdmin() {
     fetch('api-admin.php?action=logout', {
       method: 'POST'
     })
-    .then(() => {
-      localStorage.removeItem('adminSession');
+    .then(response => response.json()).then(data => {
+      if (data.status !== 'success') throw new Error(data.message);
       window.location.href = 'login.php';
     });
   }

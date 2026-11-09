@@ -1,6 +1,9 @@
+<?php require_once __DIR__ . '/app.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="csrf-token" content="<?= e($_SESSION['csrfToken']) ?>">
+  <script src="js/api.js"></script>
   <meta charset="utf-8">
   <title>About Us - Landway</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -24,43 +27,7 @@
 <body class="policy-page">
 
   <!--/ Nav Star /-->
-  <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
-    <div class="container">
-      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault"
-        aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <a class="navbar-brand text-brand" href="index.html">Land<span class="color-b">way</span></a>
-      <button type="button" class="btn btn-link nav-search navbar-toggle-box-collapse d-md-none" data-toggle="collapse"
-        data-target="#navbarTogglerDemo01" aria-expanded="false">
-        <span class="fa fa-search" aria-hidden="true"></span>
-      </button>
-      <div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="index.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="about.html">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="properties.html">Properties</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#gallery">Gallery</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="contact.html">Contact</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="login.html">Login</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <?php require __DIR__ . '/includes/nav.php'; ?>
   <!--/ Nav End /-->
 
   <!--/ About Header /-->
@@ -266,10 +233,10 @@
           <h3>Ready to Find Your Dream Property?</h3>
           <p>Let our experts guide you through every step of your property journey</p>
           <div class="cta-buttons">
-            <a href="properties.html" class="btn-b">
+            <a href="properties.php" class="btn-b">
               <i class="fa fa-search"></i> Browse Properties
             </a>
-            <a href="contact.html" class="btn-b">
+            <a href="contact.php" class="btn-b">
               <i class="fa fa-phone"></i> Contact Us
             </a>
           </div>
@@ -313,19 +280,19 @@
               <div class="w-body-a">
                 <ul class="list-unstyled">
                   <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="index.html">Home</a>
+                    <i class="fa fa-angle-right"></i> <a href="index.php">Home</a>
                   </li>
                   <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="about.html">About Us</a>
+                    <i class="fa fa-angle-right"></i> <a href="about.php">About Us</a>
                   </li>
                   <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="properties.html">Properties</a>
+                    <i class="fa fa-angle-right"></i> <a href="properties.php">Properties</a>
                   </li>
                   <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="contact.html">Contact</a>
+                    <i class="fa fa-angle-right"></i> <a href="contact.php">Contact</a>
                   </li>
                   <li class="item-list-a">
-                    <i class="fa fa-angle-right"></i> <a href="policy.html">Privacy Policy</a>
+                    <i class="fa fa-angle-right"></i> <a href="policy.php">Privacy Policy</a>
                   </li>
                 </ul>
               </div>
@@ -368,16 +335,16 @@
           <nav class="nav-footer">
             <ul class="list-inline">
               <li class="list-inline-item">
-                <a href="index.html">Home</a>
+                <a href="index.php">Home</a>
               </li>
               <li class="list-inline-item">
-                <a href="about.html">About</a>
+                <a href="about.php">About</a>
               </li>
               <li class="list-inline-item">
-                <a href="properties.html">Properties</a>
+                <a href="properties.php">Properties</a>
               </li>
               <li class="list-inline-item">
-                <a href="contact.html">Contact</a>
+                <a href="contact.php">Contact</a>
               </li>
             </ul>
           </nav>

@@ -1,216 +1,61 @@
 <?php
-// API: User/Account Management
-require_once 'config.php';
-
+require_once __DIR__ . '/config.php';
 $action = $_GET['action'] ?? '';
-$method = $_SERVER['REQUEST_METHOD'];
+$publicColumns = 'id, firstName, lastName, email, phone, registrationDate';
 
 switch ($action) {
+    case 'session':
+        requireMethod('GET');
+        respond(['status' => 'success', 'user' => $_SESSION['userSession'] ?? null,
+            'admin' => $_SESSION['adminSession'] ?? null, 'csrfToken' => $_SESSION['csrfToken']]);
+    case 'logout':
+        requireMethod('POST');
+        logoutSession();
     case 'register':
-        if ($method === 'POST') {
-            handleUserRegistration();
-        }
-        break;
-    
+        requireMethod('POST');
+        $data = getRequestData();
+        $first = textField($data, 'firstName', true, 100);
+        $last = textField($data, 'lastName', true, 100);
+        $email = emailField($data, 'email');
+        $phone = textField($data, 'phone', false, 20);
+        $password = $data['password'] ?? '';
+        if (!is_string($password) || strlen($password) < 8 || strlen($password) > 72) fail('Password must contain 8 to 72 bytes.');
+        $statement = dbQuery('INSERT INTO users (firstName, lastName, email, phone, password) VALUES (?, ?, ?, ?, ?)',
+            [$first, $last, $email, $phone, password_hash($password, PASSWORD_DEFAULT)]);
+        respond(['status' => 'success', 'message' => 'Registration successful.', 'id' => $statement->insert_id], 201);
     case 'login':
-        if ($method === 'POST') {
-            handleUserLogin();
-        }
-        break;
-    
+        requireMethod('POST');
+        $data = getRequestData();
+        $email = emailField($data, 'email');
+        $password = $data['password'] ?? '';
+        $user = dbQuery('SELECT * FROM users WHERE email = ?', [$email])->get_result()->fetch_assoc();
+        if (!$user || !is_string($password) || !password_verify($password, $user['password'])) fail('Invalid email or password.', 401);
+        session_regenerate_id(true);
+        unset($_SESSION['adminSession']);
+        $_SESSION['userSession'] = ['userId' => (int) $user['id'], 'firstName' => $user['firstName'],
+            'lastName' => $user['lastName'], 'email' => $user['email'], 'isAdmin' => false];
+        respond(['status' => 'success', 'message' => 'Login successful.', 'user' => $_SESSION['userSession']]);
     case 'get-all':
-        if ($method === 'GET') {
-            getAllUsers();
-        }
-        break;
-    
+        requireMethod('GET');
+        requireAdmin();
+        respond(['status' => 'success', 'data' => dbQuery("SELECT $publicColumns FROM users ORDER BY registrationDate DESC, id DESC")->get_result()->fetch_all(MYSQLI_ASSOC)]);
     case 'get':
-        if ($method === 'GET') {
-            getUser($_GET['id'] ?? null);
-        }
-        break;
-    
+        requireMethod('GET');
+        requireAdmin();
+        respond(['status' => 'success', 'data' => findRecord('users', $_GET['id'] ?? null, $publicColumns)]);
     case 'delete':
-        if ($method === 'POST') {
-            deleteUser($_POST['id'] ?? null);
-        }
-        break;
-    
+        requireMethod('POST');
+        requireAdmin();
+        deleteRecord('users', getRequestData()['id'] ?? null);
     case 'update':
-        if ($method === 'POST') {
-            updateUser($_POST['id'] ?? null, $_POST);
-        }
-        break;
-    
+        requireMethod('POST');
+        requireAdmin();
+        $data = getRequestData();
+        $id = recordId($data['id'] ?? $_GET['id'] ?? null);
+        findRecord('users', $id);
+        dbQuery('UPDATE users SET firstName = ?, lastName = ?, phone = ? WHERE id = ?',
+            [textField($data, 'firstName', true, 100), textField($data, 'lastName', true, 100), textField($data, 'phone', false, 20), $id]);
+        respond(['status' => 'success', 'message' => 'Account updated.']);
     default:
-        http_response_code(400);
-        echo json_encode(['status' => 'error', 'message' => 'Invalid action']);
+        fail('Invalid action.', 400);
 }
-
-function handleUserRegistration() {
-    $conn = getDB();
-    
-    $data = json_decode(file_get_contents("php://input"), true) ?? $_POST;
-    
-    $firstName = sanitizeInput($data['firstName'] ?? '');
-    $lastName = sanitizeInput($data['lastName'] ?? '');
-    $email = sanitizeInput($data['email'] ?? '');
-    $phone = sanitizeInput($data['phone'] ?? '');
-    $password = $data['password'] ?? '';
-    
-    // Validation
-    if (!$firstName || !$lastName || !$email || !$password) {
-        echo json_encode(['status' => 'error', 'message' => 'All fields are required']);
-        return;
-    }
-    
-    if (strlen($password) < 8) {
-        echo json_encode(['status' => 'error', 'message' => 'Password must be at least 8 characters']);
-        return;
-    }
-    
-    // Check if email exists
-    $checkEmail = "SELECT id FROM users WHERE email = ?";
-    $stmt = $conn->prepare($checkEmail);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows > 0) {
-        echo json_encode(['status' => 'error', 'message' => 'Email already registered']);
-        return;
-    }
-    
-    // Hash password
-    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-    
-    // Insert user
-    $insert = "INSERT INTO users (firstName, lastName, email, phone, password) VALUES (?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($insert);
-    $stmt->bind_param("sssss", $firstName, $lastName, $email, $phone, $hashedPassword);
-    
-    if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'Registration successful']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Registration failed']);
-    }
-}
-
-function handleUserLogin() {
-    $conn = getDB();
-    
-    $data = json_decode(file_get_contents("php://input"), true) ?? $_POST;
-    
-    $email = sanitizeInput($data['email'] ?? '');
-    $password = $data['password'] ?? '';
-    
-    if (!$email || !$password) {
-        echo json_encode(['status' => 'error', 'message' => 'Email and password required']);
-        return;
-    }
-    
-    $query = "SELECT id, firstName, lastName, email, password FROM users WHERE email = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows === 1) {
-        $user = $result->fetch_assoc();
-        
-        if (password_verify($password, $user['password'])) {
-            session_start();
-            $_SESSION['userSession'] = [
-                'userId' => $user['id'],
-                'firstName' => $user['firstName'],
-                'lastName' => $user['lastName'],
-                'email' => $user['email'],
-                'isAdmin' => false
-            ];
-            
-            echo json_encode(['status' => 'success', 'message' => 'Login successful', 'user' => $_SESSION['userSession']]);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Invalid password']);
-        }
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'User not found']);
-    }
-}
-
-function getAllUsers() {
-    $conn = getDB();
-    
-    $query = "SELECT id, firstName, lastName, email, phone, registrationDate FROM users ORDER BY registrationDate DESC";
-    $result = $conn->query($query);
-    
-    $users = [];
-    while ($row = $result->fetch_assoc()) {
-        $users[] = $row;
-    }
-    
-    echo json_encode(['status' => 'success', 'data' => $users]);
-}
-
-function getUser($id) {
-    $conn = getDB();
-    
-    if (!$id) {
-        echo json_encode(['status' => 'error', 'message' => 'User ID required']);
-        return;
-    }
-    
-    $query = "SELECT id, firstName, lastName, email, phone, registrationDate FROM users WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows === 1) {
-        echo json_encode(['status' => 'success', 'data' => $result->fetch_assoc()]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'User not found']);
-    }
-}
-
-function deleteUser($id) {
-    $conn = getDB();
-    
-    if (!$id) {
-        echo json_encode(['status' => 'error', 'message' => 'User ID required']);
-        return;
-    }
-    
-    $delete = "DELETE FROM users WHERE id = ?";
-    $stmt = $conn->prepare($delete);
-    $stmt->bind_param("i", $id);
-    
-    if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'User deleted successfully']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Delete failed']);
-    }
-}
-
-function updateUser($id, $data) {
-    $conn = getDB();
-    
-    if (!$id) {
-        echo json_encode(['status' => 'error', 'message' => 'User ID required']);
-        return;
-    }
-    
-    $firstName = sanitizeInput($data['firstName'] ?? '');
-    $lastName = sanitizeInput($data['lastName'] ?? '');
-    $phone = sanitizeInput($data['phone'] ?? '');
-    
-    $update = "UPDATE users SET firstName = ?, lastName = ?, phone = ? WHERE id = ?";
-    $stmt = $conn->prepare($update);
-    $stmt->bind_param("sssi", $firstName, $lastName, $phone, $id);
-    
-    if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'User updated successfully']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Update failed']);
-    }
-}
-?>

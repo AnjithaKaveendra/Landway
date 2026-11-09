@@ -1,174 +1,68 @@
 <?php
-// API: Property Management
-require_once 'config.php';
-
+require_once __DIR__ . '/config.php';
 $action = $_GET['action'] ?? '';
-$method = $_SERVER['REQUEST_METHOD'];
-
-switch ($action) {
-    case 'create':
-        if ($method === 'POST') {
-            createProperty($_POST);
-        }
-        break;
-    
-    case 'get-all':
-        if ($method === 'GET') {
-            getAllProperties();
-        }
-        break;
-    
-    case 'get':
-        if ($method === 'GET') {
-            getProperty($_GET['id'] ?? null);
-        }
-        break;
-    
-    case 'update':
-        if ($method === 'POST') {
-            updateProperty($_POST['id'] ?? null, $_POST);
-        }
-        break;
-    
-    case 'delete':
-        if ($method === 'POST') {
-            deleteProperty($_POST['id'] ?? null);
-        }
-        break;
-    
-    default:
-        http_response_code(400);
-        echo json_encode(['status' => 'error', 'message' => 'Invalid action']);
+if (in_array($action, ['get-all', 'get'], true)) {
+    requireMethod('GET');
+    if ($action === 'get') {
+        $property = findRecord('properties', $_GET['id'] ?? null);
+        $property['features'] = propertyFeatures($property);
+        respond(['status' => 'success', 'data' => $property]);
+    }
+    $rows = dbQuery('SELECT * FROM properties ORDER BY listedDate DESC, id DESC')->get_result()->fetch_all(MYSQLI_ASSOC);
+    foreach ($rows as &$row) $row['features'] = propertyFeatures($row);
+    respond(['status' => 'success', 'data' => $rows]);
 }
-
-function createProperty($data) {
-    $conn = getDB();
-    
-    $propertyTitle = sanitizeInput($data['propertyTitle'] ?? '');
-    $propertyType = sanitizeInput($data['propertyType'] ?? '');
-    $propertyStatus = sanitizeInput($data['propertyStatus'] ?? '');
-    $propertyDescription = sanitizeInput($data['propertyDescription'] ?? '');
-    $propertyAddress = sanitizeInput($data['propertyAddress'] ?? '');
-    $propertyCity = sanitizeInput($data['propertyCity'] ?? '');
-    $propertyState = sanitizeInput($data['propertyState'] ?? '');
-    $propertyZipCode = sanitizeInput($data['propertyZipCode'] ?? '');
-    $propertyCountry = sanitizeInput($data['propertyCountry'] ?? '');
-    $propertyBedrooms = intval($data['propertyBedrooms'] ?? 0);
-    $propertyBathrooms = intval($data['propertyBathrooms'] ?? 0);
-    $propertyArea = floatval($data['propertyArea'] ?? 0);
-    $propertyYearBuilt = intval($data['propertyYearBuilt'] ?? 0);
-    $propertyGarage = sanitizeInput($data['propertyGarage'] ?? '');
-    $propertyPrice = floatval($data['propertyPrice'] ?? 0);
-    $propertyCurrency = sanitizeInput($data['propertyCurrency'] ?? 'LKR');
-    $features = sanitizeInput($data['features'] ?? '');
-    $ownerName = sanitizeInput($data['ownerName'] ?? '');
-    $ownerEmail = sanitizeInput($data['ownerEmail'] ?? '');
-    $ownerPhone = sanitizeInput($data['ownerPhone'] ?? '');
-    $ownerWhatsApp = sanitizeInput($data['ownerWhatsApp'] ?? '');
-    
-    if (!$propertyTitle || !$propertyAddress || !$propertyCity) {
-        echo json_encode(['status' => 'error', 'message' => 'Required fields missing']);
-        return;
+if (!in_array($action, ['create', 'update', 'delete'], true)) fail('Invalid action.', 400);
+requireMethod('POST');
+requireLogin();
+$data = getRequestData();
+if ($action !== 'create') {
+    $id = recordId($data['id'] ?? $_GET['id'] ?? null);
+    $existing = findRecord('properties', $id);
+    if (!isAdmin() && (int) ($existing['ownerUserId'] ?? 0) !== (int) ($_SESSION['userSession']['userId'] ?? 0)) {
+        fail('You can only change your own listings.', 403);
     }
-    
-    $insert = "INSERT INTO properties (propertyTitle, propertyType, propertyStatus, propertyDescription, 
-               propertyAddress, propertyCity, propertyState, propertyZipCode, propertyCountry, 
-               propertyBedrooms, propertyBathrooms, propertyArea, propertyYearBuilt, propertyGarage, 
-               propertyPrice, propertyCurrency, features, ownerName, ownerEmail, ownerPhone, ownerWhatsApp) 
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    
-    $stmt = $conn->prepare($insert);
-    $stmt->bind_param("ssssssssssiiddsssssss", 
-        $propertyTitle, $propertyType, $propertyStatus, $propertyDescription,
-        $propertyAddress, $propertyCity, $propertyState, $propertyZipCode, $propertyCountry,
-        $propertyBedrooms, $propertyBathrooms, $propertyArea, $propertyYearBuilt, $propertyGarage,
-        $propertyPrice, $propertyCurrency, $features, $ownerName, $ownerEmail, $ownerPhone, $ownerWhatsApp
-    );
-    
-    if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'Property created successfully', 'id' => $stmt->insert_id]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Failed to create property']);
-    }
+    if ($action === 'delete') deleteRecord('properties', $id);
+    $data = array_merge($existing, $data);
 }
-
-function getAllProperties() {
-    $conn = getDB();
-    
-    $query = "SELECT * FROM properties ORDER BY listedDate DESC";
-    $result = $conn->query($query);
-    
-    $properties = [];
-    while ($row = $result->fetch_assoc()) {
-        $row['features'] = explode(',', $row['features']);
-        $properties[] = $row;
-    }
-    
-    echo json_encode(['status' => 'success', 'data' => $properties]);
+$fields = ['propertyTitle' => 150, 'propertyType' => 50, 'propertyStatus' => 50,
+    'propertyDescription' => 20000, 'propertyAddress' => 255, 'propertyCity' => 100,
+    'propertyState' => 100, 'propertyZipCode' => 20, 'propertyCountry' => 100,
+    'propertyGarage' => 50, 'propertyCurrency' => 10, 'ownerName' => 100,
+    'ownerPhone' => 20, 'ownerWhatsApp' => 20];
+$values = [];
+foreach ($fields as $field => $limit) {
+    $values[$field] = textField($data, $field, in_array($field,
+        ['propertyTitle', 'propertyType', 'propertyStatus', 'propertyAddress', 'propertyCity', 'ownerName', 'ownerPhone'], true), $limit);
 }
-
-function getProperty($id) {
-    $conn = getDB();
-    
-    if (!$id) {
-        echo json_encode(['status' => 'error', 'message' => 'Property ID required']);
-        return;
-    }
-    
-    $query = "SELECT * FROM properties WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows === 1) {
-        $property = $result->fetch_assoc();
-        $property['features'] = explode(',', $property['features']);
-        echo json_encode(['status' => 'success', 'data' => $property]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Property not found']);
-    }
+if (!in_array($values['propertyType'], ['house', 'land', 'apartment', 'commercial'], true)) fail('Invalid property type.');
+if (!in_array($values['propertyStatus'], ['sale', 'rent', 'lease'], true)) fail('Invalid property status.');
+$values['propertyCurrency'] = $values['propertyCurrency'] ?: 'LKR';
+if (!in_array($values['propertyCurrency'], ['LKR', 'USD', 'EUR', 'GBP'], true)) fail('Invalid currency.');
+$values['ownerEmail'] = emailField($data, 'ownerEmail');
+foreach (['propertyBedrooms', 'propertyBathrooms', 'propertyArea', 'propertyYearBuilt', 'propertyPrice'] as $field) {
+    $raw = $data[$field] ?? 0;
+    if ($raw === '') $raw = 0;
+    if (!is_numeric($raw) || !is_finite((float) $raw) || (float) $raw < 0) fail('Invalid ' . $field . '.');
+    $integer = in_array($field, ['propertyBedrooms', 'propertyBathrooms', 'propertyYearBuilt'], true);
+    $max = $field === 'propertyPrice' ? 9999999999999.99 : ($field === 'propertyArea' ? 99999999.99 : 9999);
+    if ((float) $raw > $max || ($integer && (float) $raw !== (float) (int) $raw)) fail('Invalid ' . $field . '.');
+    $values[$field] = $integer ? (int) $raw : (float) $raw;
 }
-
-function updateProperty($id, $data) {
-    $conn = getDB();
-    
-    if (!$id) {
-        echo json_encode(['status' => 'error', 'message' => 'Property ID required']);
-        return;
-    }
-    
-    $propertyTitle = sanitizeInput($data['propertyTitle'] ?? '');
-    $propertyStatus = sanitizeInput($data['propertyStatus'] ?? '');
-    $propertyPrice = floatval($data['propertyPrice'] ?? 0);
-    
-    $update = "UPDATE properties SET propertyTitle = ?, propertyStatus = ?, propertyPrice = ? WHERE id = ?";
-    $stmt = $conn->prepare($update);
-    $stmt->bind_param("ssdi", $propertyTitle, $propertyStatus, $propertyPrice, $id);
-    
-    if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'Property updated successfully']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Update failed']);
-    }
+if ($values['propertyPrice'] <= 0) fail('Price must be greater than zero.');
+$features = $data['features'] ?? '';
+if (is_array($features)) {
+    foreach ($features as $feature) if (!is_string($feature)) fail('Invalid features.');
+    $features = implode(',', $features);
 }
-
-function deleteProperty($id) {
-    $conn = getDB();
-    
-    if (!$id) {
-        echo json_encode(['status' => 'error', 'message' => 'Property ID required']);
-        return;
-    }
-    
-    $delete = "DELETE FROM properties WHERE id = ?";
-    $stmt = $conn->prepare($delete);
-    $stmt->bind_param("i", $id);
-    
-    if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'Property deleted successfully']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Delete failed']);
-    }
+$values['features'] = textField(['features' => $features], 'features', false, 2000);
+if ($action === 'create') {
+    $values['ownerUserId'] = $_SESSION['userSession']['userId'] ?? null;
+    $columns = implode(', ', array_keys($values));
+    $placeholders = implode(', ', array_fill(0, count($values), '?'));
+    $statement = dbQuery("INSERT INTO properties ($columns) VALUES ($placeholders)", array_values($values));
+    respond(['status' => 'success', 'message' => 'Property created.', 'id' => $statement->insert_id], 201);
 }
-?>
+$assignments = implode(', ', array_map(function ($field) { return "$field = ?"; }, array_keys($values)));
+dbQuery("UPDATE properties SET $assignments WHERE id = ?", array_merge(array_values($values), [$id]));
+respond(['status' => 'success', 'message' => 'Property updated.']);

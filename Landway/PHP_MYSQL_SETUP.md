@@ -1,463 +1,120 @@
-# Landway PHP/MySQL Conversion - Setup Guide
+# PHP / MySQL setup
 
-## 📋 Overview
-The Landway project has been converted from a client-side localStorage system to a full PHP/MySQL backend with comprehensive CRUD operations for:
-- User Accounts (Registration, Login, Management)
-- Properties (Create, Read, Update, Delete)
-- Inquiries (Submit, View, Delete)
-- Employees (Add, View, Update, Delete)
-- Admin Authentication & Management
+## Stack and application directory
 
-## 🔧 Requirements
-- PHP 7.4 or higher
-- MySQL 5.7 or higher
-- Apache/Nginx web server with PHP support
-- Web browser with JavaScript enabled
+- Frontend: HTML rendered by PHP, local CSS, and browser JavaScript. Existing Bootstrap and jQuery assets are retained.
+- Backend: PHP 7.4+ with `mysqli` and `mysqlnd` (`get_result` support).
+- Database: MySQL 5.7+ or compatible MariaDB, using InnoDB and `utf8mb4`.
+- No Node.js build step, Composer dependencies, or external API is required.
 
-## 📁 Project Structure
+Serve the `Landway/` directory containing `index.php` as the application root. Opening PHP files directly or using a static-only preview server will not execute the backend.
 
-### Core Files
-- `config.php` - Database connection configuration
-- `init-db.php` - Database initialization script (run once)
+## Database configuration
 
-### API Endpoints (RESTful)
-- `api-users.php` - User management endpoints
-- `api-properties.php` - Property management endpoints
-- `api-inquiries.php` - Inquiry management endpoints
-- `api-employees.php` - Employee management endpoints
-- `api-admin.php` - Admin authentication and management
+`settings.php` reads these environment variables, with development defaults:
 
-### PHP Pages (Frontend)
-- `login.php` - User/Admin login page
-- `register.php` - New user registration
-- `contact.php` - Customer inquiry form
-- `add-property.php` - Property listing form
-- `admin-dashboard.php` - Admin management dashboard
-- `index.php`, `properties.php`, etc. - Main site pages (unchanged)
+| Variable | Default |
+| --- | --- |
+| `DB_HOST` | `127.0.0.1` |
+| `DB_PORT` | `3306` |
+| `DB_USER` | `root` |
+| `DB_PASS` | empty |
+| `DB_NAME` | `landway_db` |
 
-### JavaScript Files
-- `js/admin-dashboard-db.js` - Admin dashboard logic (database version)
+Use a database name containing only letters, digits, and underscores. In Apache, configure environment variables for the PHP process or update the development defaults in `settings.php`. Variables set in a PowerShell session apply to processes launched from that session, not an already running Apache service.
 
-## 🚀 Installation Steps
+## Initialize or upgrade
 
-### Step 1: Database Setup
-1. Open phpMyAdmin or MySQL console
-2. Create a database called `landway_db`:
-   ```sql
-   CREATE DATABASE landway_db DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-   ```
+Start MySQL, then run from this application directory:
 
-3. Navigate to your project root in browser:
-   ```
-   http://localhost/Landway/init-db.php
-   ```
-   This will:
-   - Create all necessary tables
-   - Create a default admin user
-   - Set up proper indexes and relationships
-
-### Step 2: Update Database Configuration
-Edit `config.php` with your database credentials:
-```php
-define('DB_HOST', 'localhost');  // Your database host
-define('DB_USER', 'root');       // Your MySQL username
-define('DB_PASS', '');           // Your MySQL password
-define('DB_NAME', 'landway_db'); // Database name
+```powershell
+$env:ADMIN_EMAIL = 'admin@landway.com'
+$adminSecret = Read-Host 'Choose an admin password (8 to 72 bytes)' -AsSecureString
+$env:ADMIN_PASSWORD = [System.Net.NetworkCredential]::new('', $adminSecret).Password
+& C:\xampp\php\php.exe init-db.php --seed
+Remove-Item Env:ADMIN_PASSWORD
 ```
 
-### Step 3: Verify Installation
-1. Go to `http://localhost/Landway/login.php`
-2. Login with demo admin account:
-   - Email: `admin@landway.com`
-   - Password: `Admin123456`
+On other installations, use `php` in place of the XAMPP executable path. The database account needs database creation and schema alteration permissions during initialization.
 
-3. Access admin dashboard at `http://localhost/Landway/admin-dashboard.php`
+The initializer connects before selecting a database, creates missing tables, adds `properties.ownerUserId` to the original schema, normalizes existing property types, and creates the first administrator using `ADMIN_EMAIL` and `ADMIN_PASSWORD`. Existing administrator accounts and passwords remain unchanged. No built-in administrator password is installed or displayed on the login page.
 
-## 📚 API Documentation
+`--seed` inserts the four original example listings, priced in USD, only when the catalog is empty. Omit it to start without sample properties. The database is the source of truth: new listings appear on both public pages and the admin dashboard.
 
-### User Management (`api-users.php`)
+Setup is a terminal command. Accessing `init-db.php` in a browser returns HTTP 403. `test-connection.php` is a read-only JSON health check; it does not create databases, tables, or accounts.
 
-#### Register User
-```
-POST /api-users.php?action=register
-Body: { firstName, lastName, email, phone, password }
-Response: { status, message, id }
-```
+### SQL import option
 
-#### User Login
-```
-POST /api-users.php?action=login
-Body: { email, password }
-Response: { status, message, user }
+Create and select an empty MySQL database in phpMyAdmin, then import `database/schema.sql`. Run `php init-db.php` afterward to create the first administrator or upgrade an existing schema. The SQL file defines tables; it does not contain an administrator password or sample listings.
+
+## Start PHP
+
+```powershell
+& C:\xampp\php\php.exe -S localhost:8000
 ```
 
-#### Get All Users
-```
-GET /api-users.php?action=get-all
-Response: { status, data: [users] }
-```
+Open `http://localhost:8000/index.php`. Alternatively, place this application directory under Apache's document root and browse its matching URL. Relative page and API links support an application hosted in a subdirectory.
 
-#### Get User by ID
-```
-GET /api-users.php?action=get&id=1
-Response: { status, data: user }
-```
+The PHP session directory configured by `session.save_path` must be writable by the PHP process. XAMPP normally uses `C:\xampp\tmp`.
 
-#### Update User
-```
-POST /api-users.php?action=update&id=1
-Body: { firstName, lastName, phone }
-Response: { status, message }
-```
+## Pages and data
 
-#### Delete User
-```
-POST /api-users.php?action=delete
-Body: { id }
-Response: { status, message }
-```
+| Page | Behavior |
+| --- | --- |
+| `index.php` | Home; administrators are directed to the dashboard |
+| `properties.php` | Database listings with type, currency, and price filters |
+| `property-detail.php?id=123` | Database-backed details, inquiry form, saved property action, and mortgage calculator |
+| `property-detail-1.php` through `property-detail-4.php` | Compatibility redirects to the matching listing ID |
+| `register.php`, `login.php` | Customer registration; customer or administrator login |
+| `add-property.php` | Authenticated property submission |
+| `saved-properties.php` | Current customer's saved listings |
+| `contact.php` | Public inquiry submission |
+| `admin-dashboard.php` | Administrator account, listing, inquiry, and employee management |
+| `about.php`, `policy.php` | Informational pages |
+| `Land Way/register.php` | Compatibility redirect to the canonical registration page |
 
-### Property Management (`api-properties.php`)
+Listing images use the included example image for their property type. The original submission form has no upload field; this conversion does not add image upload handling. Existing static property text is provided by the optional seed data. Legacy browser-storage records are not automatically moved to MySQL.
 
-#### Create Property
-```
-POST /api-properties.php?action=create
-Body: { propertyTitle, propertyType, propertyStatus, propertyDescription, 
-        propertyAddress, propertyCity, propertyBedrooms, propertyBathrooms,
-        propertyArea, propertyPrice, propertyCurrency, features, ownerName, ownerEmail, ownerPhone }
-Response: { status, message, id }
-```
+## API contract
 
-#### Get All Properties
-```
-GET /api-properties.php?action=get-all
-Response: { status, data: [properties] }
-```
+Responses are JSON: `{ "status": "success", "data": ... }` or `{ "status": "error", "message": "..." }`. Creation responses include `id` and HTTP 201. Validation errors use 422, invalid credentials 401, denied access 403, missing records 404, duplicate values 409, and unavailable database access 503.
 
-#### Get Property by ID
-```
-GET /api-properties.php?action=get&id=1
-Response: { status, data: property }
-```
+All writes use POST. Reads use GET. POST requests require the PHP session cookie and `X-CSRF-Token` header. Pages provide a token in `<meta name="csrf-token">`; `js/api.js` attaches it to same-origin `fetch` requests. Other clients can get a token with `GET api-users.php?action=session` and must retain the session cookie. Form posts may provide `csrfToken` instead. Refresh the token after logout.
 
-#### Update Property
-```
-POST /api-properties.php?action=update&id=1
-Body: { propertyTitle, propertyStatus, propertyPrice }
-Response: { status, message }
-```
+| Endpoint | Actions and access |
+| --- | --- |
+| `api-users.php` | Public POST `register`, `login`; GET `session`; POST `logout`; admin GET `get-all`, `get&id=...`; admin POST `update`, `delete` |
+| `api-admin.php` | POST `login`, `logout`; admin POST `change-password` |
+| `api-properties.php` | Public GET `get-all`, `get&id=...`; authenticated POST `create`; owner or admin POST `update`, `delete` |
+| `api-inquiries.php` | Public POST `create`; admin GET `get-all`, `get&id=...`; admin POST `delete` |
+| `api-employees.php` | Admin GET `get-all`, `get&id=...`; admin POST `create`, `update`, `delete` |
+| `api-favorites.php` | Customer GET `get-all`; customer POST `toggle` with property `id` |
 
-#### Delete Property
-```
-POST /api-properties.php?action=delete
-Body: { id }
-Response: { status, message }
+Use `?action=...` on each endpoint. Update and delete requests send `id` in the JSON body. Update endpoints also accept a query `id`; property and employee updates preserve omitted fields.
+
+- Registration: `firstName`, `lastName`, `email`, optional `phone`, and `password` (8–72 bytes).
+- Login: `email`, `password`.
+- Property creation: required `propertyTitle`, `propertyType` (`house`, `land`, `apartment`, `commercial`), `propertyStatus` (`sale`, `rent`, `lease`), `propertyAddress`, `propertyCity`, positive `propertyPrice`, `ownerName`, `ownerEmail`, `ownerPhone`. Optional description, state, postal code, country, bedrooms, bathrooms, area, year, garage, currency (`LKR`, `USD`, `EUR`, `GBP`), features, and WhatsApp fields use the names in `database/schema.sql`. `features` accepts an array or comma-separated string. The backend assigns ownership from the session.
+- Inquiry creation: required `contactName`, `contactEmail`, `contactMessageText`; optional `contactPhone`, `contactSubject`, `contactPropertyType`. Listing inquiry subjects include the property ID and title.
+- Employee creation: `employeeId`, `firstName`, `lastName`, `email`, `position`; optional `phone`, `hireDate` (`YYYY-MM-DD`, defaults to today).
+- Password change: `currentPassword`, `newPassword`.
+
+PHP sessions determine access; browser storage is not used for identity or records. Passwords are hashed, queries use prepared statements, and stored text is escaped when rendered into HTML. Account API responses omit password hashes. Deleting a customer or property also removes related saved-property records.
+
+## Verify and troubleshoot
+
+From the repository root:
+
+```powershell
+python tests/integration.py
+python tests/integration.py --browser
 ```
 
-### Inquiry Management (`api-inquiries.php`)
+Tests use a generated `landway_test_*` database, initialize it twice, exercise HTTP APIs and authorization, and remove that database on completion. The optional browser pass covers real forms and navigation with Playwright. Set `PHP_BIN` if PHP is elsewhere; configure the `DB_*` environment variables for your local database server. The test database name is always generated separately from `DB_NAME`.
 
-#### Create Inquiry
-```
-POST /api-inquiries.php?action=create
-Body: { contactName, contactEmail, contactPhone, contactSubject, 
-        contactPropertyType, contactMessageText }
-Response: { status, message, id }
-```
-
-#### Get All Inquiries
-```
-GET /api-inquiries.php?action=get-all
-Response: { status, data: [inquiries] }
-```
-
-#### Get Inquiry by ID
-```
-GET /api-inquiries.php?action=get&id=1
-Response: { status, data: inquiry }
-```
-
-#### Delete Inquiry
-```
-POST /api-inquiries.php?action=delete
-Body: { id }
-Response: { status, message }
-```
-
-### Employee Management (`api-employees.php`)
-
-#### Create Employee
-```
-POST /api-employees.php?action=create
-Body: { employeeId, firstName, lastName, email, phone, position, hireDate }
-Response: { status, message, id }
-```
-
-#### Get All Employees
-```
-GET /api-employees.php?action=get-all
-Response: { status, data: [employees] }
-```
-
-#### Get Employee by ID
-```
-GET /api-employees.php?action=get&id=1
-Response: { status, data: employee }
-```
-
-#### Update Employee
-```
-POST /api-employees.php?action=update&id=1
-Body: { firstName, lastName, email, phone, position }
-Response: { status, message }
-```
-
-#### Delete Employee
-```
-POST /api-employees.php?action=delete
-Body: { id }
-Response: { status, message }
-```
-
-### Admin Management (`api-admin.php`)
-
-#### Admin Login
-```
-POST /api-admin.php?action=login
-Body: { email, password }
-Response: { status, message, admin }
-```
-
-#### Change Admin Password
-```
-POST /api-admin.php?action=change-password
-Body: { currentPassword, newPassword }
-Response: { status, message }
-```
-
-#### Admin Logout
-```
-POST /api-admin.php?action=logout
-Response: { status, message }
-```
-
-## 🗄️ Database Tables
-
-### users
-- id (INT, Primary Key, Auto Increment)
-- firstName (VARCHAR 100)
-- lastName (VARCHAR 100)
-- email (VARCHAR 120, Unique)
-- phone (VARCHAR 20)
-- password (VARCHAR 255, Hashed)
-- registrationDate (TIMESTAMP)
-
-### properties
-- id (INT, Primary Key)
-- propertyTitle (VARCHAR 150)
-- propertyType (VARCHAR 50)
-- propertyStatus (VARCHAR 50) - sale, rent, lease
-- propertyDescription (LONGTEXT)
-- propertyAddress (VARCHAR 255)
-- propertyCity (VARCHAR 100)
-- propertyState (VARCHAR 100)
-- propertyZipCode (VARCHAR 20)
-- propertyCountry (VARCHAR 100)
-- propertyBedrooms (INT)
-- propertyBathrooms (INT)
-- propertyArea (DECIMAL 10,2)
-- propertyYearBuilt (INT)
-- propertyGarage (VARCHAR 50)
-- propertyPrice (DECIMAL 15,2)
-- propertyCurrency (VARCHAR 10)
-- features (LONGTEXT) - Comma-separated
-- ownerName (VARCHAR 100)
-- ownerEmail (VARCHAR 120)
-- ownerPhone (VARCHAR 20)
-- ownerWhatsApp (VARCHAR 20)
-- listedDate (TIMESTAMP)
-
-### inquiries
-- id (INT, Primary Key)
-- contactName (VARCHAR 100)
-- contactEmail (VARCHAR 120)
-- contactPhone (VARCHAR 20)
-- contactSubject (VARCHAR 200)
-- contactPropertyType (VARCHAR 50)
-- contactMessageText (LONGTEXT)
-- inquiryDate (TIMESTAMP)
-
-### employees
-- id (INT, Primary Key)
-- employeeId (VARCHAR 50, Unique)
-- firstName (VARCHAR 100)
-- lastName (VARCHAR 100)
-- email (VARCHAR 120, Unique)
-- phone (VARCHAR 20)
-- position (VARCHAR 100)
-- hireDate (DATE)
-- created_at (TIMESTAMP)
-- updated_at (TIMESTAMP)
-
-### admins
-- id (INT, Primary Key)
-- firstName (VARCHAR 100)
-- lastName (VARCHAR 100)
-- email (VARCHAR 120, Unique)
-- password (VARCHAR 255, Hashed)
-
-## 🔐 Security Features
-
-### Password Security
-- All passwords are hashed using PHP's `password_hash()` with BCRYPT algorithm
-- Password verification uses `password_verify()` for secure comparison
-
-### Input Validation
-- All user inputs are sanitized using `sanitizeInput()` function
-- Email validation for all email fields
-- Type validation for numeric fields
-
-### Database Security
-- Prepared statements used for all queries (prevents SQL injection)
-- Parameterized queries with proper type binding
-
-### CORS Headers
-- API endpoints include proper CORS headers for cross-origin requests
-- Content-Type set to application/json
-
-## 👤 Default Admin Account
-- **Email:** admin@landway.com
-- **Password:** Admin123456
-
-⚠️ **Important:** Change this password immediately after first login!
-
-## 🔄 User Workflows
-
-### Registration Flow
-1. User visits `/register.php`
-2. Fills registration form with email and password
-3. Form sends POST request to `api-users.php?action=register`
-4. API validates input and checks email uniqueness
-5. Password is hashed and user data stored in database
-6. User redirected to login page
-
-### Login Flow
-1. User/Admin visits `/login.php`
-2. Enters email and password
-3. Form first tries admin login via `api-admin.php?action=login`
-4. If not admin, tries user login via `api-users.php?action=login`
-5. Session is created on server
-6. User redirected to appropriate dashboard (admin or user)
-
-### Admin Dashboard Flow
-1. Admin logs in and session is verified
-2. Dashboard loads and authenticates user
-3. AJAX calls fetch data from all API endpoints
-4. Data is rendered in tables with CRUD operation buttons
-5. Each action (View/Edit/Delete) sends request to appropriate API endpoint
-
-### Property Listing Flow
-1. Logged-in user visits `/add-property.php`
-2. Fills comprehensive property form
-3. Form sends POST request to `api-properties.php?action=create`
-4. Property data stored in database with owner information
-5. User redirected to properties listing page
-
-### Inquiry Flow
-1. Customer fills inquiry form on `/contact.php`
-2. Form sends POST request to `api-inquiries.php?action=create`
-3. Inquiry data stored in database with timestamp
-4. Admin can view all inquiries in dashboard
-
-## 📝 Session Management
-
-### Server-Side Sessions
-- PHP sessions are used for authenticated users
-- Session data stored in `$_SESSION` array
-- Admin sessions include: adminId, firstName, lastName, email, isAdmin=true
-- User sessions include: userId, firstName, lastName, email, isAdmin=false
-
-### Session Protection
-- Admin routes check for `$_SESSION['adminSession']['isAdmin']`
-- User routes check for `$_SESSION['userSession']`
-- Unauthorized users redirected to login page
-
-## 🐛 Troubleshooting
-
-### Database Connection Error
-- Verify MySQL is running
-- Check `config.php` credentials match your database
-- Ensure database `landway_db` exists
-
-### "Access Denied" on Admin Dashboard
-- Check if admin session exists
-- Verify admin email in database matches login
-- Clear browser session and login again
-
-### 404 Errors on API Calls
-- Ensure API files (`api-*.php`) are in project root
-- Check file permissions (should be readable)
-- Verify fetch URLs in JavaScript match file paths
-
-### Password Hash Errors
-- Ensure PHP version supports `password_hash()` (PHP 5.5+)
-- Check password field in database is VARCHAR(255)
-
-## 🔄 Migration Notes
-
-### From localStorage to Database
-- Old HTML files remain in `Land Way/` subdirectory
-- New PHP files in root directory
-- Update all navigation links from `.html` to `.php`
-- Remove localStorage references from client code
-
-### File Name Changes
-- `login.html` → `login.php`
-- `register.html` → `register.php`
-- `contact.html` → `contact.php`
-- `add-property.html` → `add-property.php`
-- `admin-dashboard.html` → `admin-dashboard.php`
-- `admin-dashboard.js` → `admin-dashboard-db.js`
-
-## 🚀 Next Steps
-
-1. **Backup Database Regularly**
-   - Implement automated database backups
-   - Export SQL backups weekly
-
-2. **Add Features**
-   - Email notifications on inquiries
-   - User profile pages
-   - Property image uploads
-   - Advanced search filters
-
-3. **Performance Optimization**
-   - Add database indexes on frequently searched fields
-   - Implement pagination for large result sets
-   - Cache frequently accessed data
-
-4. **Security Hardening**
-   - Implement rate limiting for login attempts
-   - Add CSRF tokens to forms
-   - Implement two-factor authentication
-   - Regular security audits
-
-5. **Production Deployment**
-   - Move `config.php` outside web root
-   - Use environment variables for credentials
-   - Enable HTTPS
-   - Implement web application firewall (WAF)
-
-## 📞 Support
-
-For issues or questions:
-1. Check this documentation
-2. Review API endpoint documentation
-3. Check browser console for JavaScript errors
-4. Check server error logs: `error_log`
-5. Test API endpoints using tools like Postman
-
----
-
-**Conversion Date:** December 15, 2025
-**PHP Version Required:** 7.4+
-**MySQL Version Required:** 5.7+
+- Connection failure: start MySQL and verify the same database settings are used by setup and the PHP server.
+- Missing schema or ownership column: rerun `php init-db.php` against the intended database.
+- Session warnings: give the PHP process access to its configured session directory.
+- Expired session / HTTP 403 on a form: refresh the page to obtain its current CSRF token.
+- PHP source displayed in the browser: use Apache with PHP enabled or the PHP development server.
+- Existing administrator credentials: rerunning initialization preserves them; sign in and use the dashboard's Change Password action.

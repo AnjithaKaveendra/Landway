@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/app.php';
 
 // Check if already logged in
 if (isset($_SESSION['userSession']) || isset($_SESSION['adminSession'])) {
@@ -10,6 +10,8 @@ if (isset($_SESSION['userSession']) || isset($_SESSION['adminSession'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="csrf-token" content="<?= e($_SESSION['csrfToken']) ?>">
+  <script src="js/api.js"></script>
   <meta charset="utf-8">
   <title>Register - Landway</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">

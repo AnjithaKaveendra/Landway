@@ -1,163 +1,29 @@
 <?php
-// API: Employee Management
-require_once 'config.php';
-
+require_once __DIR__ . '/config.php';
 $action = $_GET['action'] ?? '';
-$method = $_SERVER['REQUEST_METHOD'];
-
-switch ($action) {
-    case 'create':
-        if ($method === 'POST') {
-            createEmployee($_POST);
-        }
-        break;
-    
-    case 'get-all':
-        if ($method === 'GET') {
-            getAllEmployees();
-        }
-        break;
-    
-    case 'get':
-        if ($method === 'GET') {
-            getEmployee($_GET['id'] ?? null);
-        }
-        break;
-    
-    case 'update':
-        if ($method === 'POST') {
-            updateEmployee($_POST['id'] ?? null, $_POST);
-        }
-        break;
-    
-    case 'delete':
-        if ($method === 'POST') {
-            deleteEmployee($_POST['id'] ?? null);
-        }
-        break;
-    
-    default:
-        http_response_code(400);
-        echo json_encode(['status' => 'error', 'message' => 'Invalid action']);
+if (!in_array($action, ['get-all', 'get', 'create', 'update', 'delete'], true)) fail('Invalid action.', 400);
+requireMethod(in_array($action, ['get-all', 'get'], true) ? 'GET' : 'POST');
+requireAdmin();
+if ($action === 'get-all') respond(['status' => 'success', 'data' => dbQuery('SELECT * FROM employees ORDER BY created_at DESC, id DESC')->get_result()->fetch_all(MYSQLI_ASSOC)]);
+if ($action === 'get') respond(['status' => 'success', 'data' => findRecord('employees', $_GET['id'] ?? null)]);
+$data = getRequestData();
+if ($action !== 'create') {
+    $id = recordId($data['id'] ?? $_GET['id'] ?? null);
+    $existing = findRecord('employees', $id);
+    if ($action === 'delete') deleteRecord('employees', $id);
+    $data = array_merge($existing, $data);
 }
-
-function createEmployee($data) {
-    $conn = getDB();
-    
-    $employeeId = sanitizeInput($data['employeeId'] ?? '');
-    $firstName = sanitizeInput($data['firstName'] ?? '');
-    $lastName = sanitizeInput($data['lastName'] ?? '');
-    $email = sanitizeInput($data['email'] ?? '');
-    $phone = sanitizeInput($data['phone'] ?? '');
-    $position = sanitizeInput($data['position'] ?? '');
-    $hireDate = sanitizeInput($data['hireDate'] ?? date('Y-m-d'));
-    
-    if (!$employeeId || !$firstName || !$lastName || !$email) {
-        echo json_encode(['status' => 'error', 'message' => 'Required fields missing']);
-        return;
-    }
-    
-    // Check if employee ID or email exists
-    $checkEmployee = "SELECT id FROM employees WHERE employeeId = ? OR email = ?";
-    $stmt = $conn->prepare($checkEmployee);
-    $stmt->bind_param("ss", $employeeId, $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows > 0) {
-        echo json_encode(['status' => 'error', 'message' => 'Employee ID or Email already exists']);
-        return;
-    }
-    
-    $insert = "INSERT INTO employees (employeeId, firstName, lastName, email, phone, position, hireDate) 
-               VALUES (?, ?, ?, ?, ?, ?, ?)";
-    
-    $stmt = $conn->prepare($insert);
-    $stmt->bind_param("sssssss", $employeeId, $firstName, $lastName, $email, $phone, $position, $hireDate);
-    
-    if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'Employee created successfully', 'id' => $stmt->insert_id]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Failed to create employee']);
-    }
+$values = [textField($data, 'employeeId', true, 50), textField($data, 'firstName', true, 100),
+    textField($data, 'lastName', true, 100), emailField($data, 'email'),
+    textField($data, 'phone', false, 20), textField($data, 'position', true, 100)];
+$hireDate = textField($data, 'hireDate', false, 10) ?: date('Y-m-d');
+$date = DateTime::createFromFormat('!Y-m-d', $hireDate);
+if (!$date || $date->format('Y-m-d') !== $hireDate) fail('Enter a valid hire date.');
+$values[] = $hireDate;
+if ($action === 'create') {
+    $statement = dbQuery('INSERT INTO employees (employeeId, firstName, lastName, email, phone, position, hireDate) VALUES (?, ?, ?, ?, ?, ?, ?)', $values);
+    respond(['status' => 'success', 'message' => 'Employee created.', 'id' => $statement->insert_id], 201);
 }
-
-function getAllEmployees() {
-    $conn = getDB();
-    
-    $query = "SELECT * FROM employees ORDER BY created_at DESC";
-    $result = $conn->query($query);
-    
-    $employees = [];
-    while ($row = $result->fetch_assoc()) {
-        $employees[] = $row;
-    }
-    
-    echo json_encode(['status' => 'success', 'data' => $employees]);
-}
-
-function getEmployee($id) {
-    $conn = getDB();
-    
-    if (!$id) {
-        echo json_encode(['status' => 'error', 'message' => 'Employee ID required']);
-        return;
-    }
-    
-    $query = "SELECT * FROM employees WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows === 1) {
-        echo json_encode(['status' => 'success', 'data' => $result->fetch_assoc()]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Employee not found']);
-    }
-}
-
-function updateEmployee($id, $data) {
-    $conn = getDB();
-    
-    if (!$id) {
-        echo json_encode(['status' => 'error', 'message' => 'Employee ID required']);
-        return;
-    }
-    
-    $firstName = sanitizeInput($data['firstName'] ?? '');
-    $lastName = sanitizeInput($data['lastName'] ?? '');
-    $email = sanitizeInput($data['email'] ?? '');
-    $phone = sanitizeInput($data['phone'] ?? '');
-    $position = sanitizeInput($data['position'] ?? '');
-    
-    $update = "UPDATE employees SET firstName = ?, lastName = ?, email = ?, phone = ?, position = ? WHERE id = ?";
-    $stmt = $conn->prepare($update);
-    $stmt->bind_param("sssssi", $firstName, $lastName, $email, $phone, $position, $id);
-    
-    if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'Employee updated successfully']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Update failed']);
-    }
-}
-
-function deleteEmployee($id) {
-    $conn = getDB();
-    
-    if (!$id) {
-        echo json_encode(['status' => 'error', 'message' => 'Employee ID required']);
-        return;
-    }
-    
-    $delete = "DELETE FROM employees WHERE id = ?";
-    $stmt = $conn->prepare($delete);
-    $stmt->bind_param("i", $id);
-    
-    if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'Employee deleted successfully']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Delete failed']);
-    }
-}
-?>
+$values[] = $id;
+dbQuery('UPDATE employees SET employeeId = ?, firstName = ?, lastName = ?, email = ?, phone = ?, position = ?, hireDate = ? WHERE id = ?', $values);
+respond(['status' => 'success', 'message' => 'Employee updated.']);

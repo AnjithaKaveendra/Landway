@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/app.php';
 
 // Check if already logged in
 if (isset($_SESSION['userSession']) || isset($_SESSION['adminSession'])) {
@@ -14,6 +14,8 @@ if (isset($_SESSION['userSession']) || isset($_SESSION['adminSession'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="csrf-token" content="<?= e($_SESSION['csrfToken']) ?>">
+  <script src="js/api.js"></script>
   <meta charset="utf-8">
   <title>Login - Landway</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -132,12 +134,6 @@ if (isset($_SESSION['userSession']) || isset($_SESSION['adminSession'])) {
           <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
         </div>
 
-        <div style="font-size: 12px; color: #666; margin-bottom: 20px;">
-          <p><strong>Demo Admin Account:</strong></p>
-          <p>Email: admin@landway.com</p>
-          <p>Password: Admin123456</p>
-        </div>
-
         <button type="submit" class="btn-login">Login</button>
       </form>
 
@@ -148,105 +144,7 @@ if (isset($_SESSION['userSession']) || isset($_SESSION['adminSession'])) {
   </div>
 
   <script src="lib/jquery/jquery.min.js"></script>
-  <script>
-    function handleLogin(event) {
-      event.preventDefault();
-
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-
-      if (!email || !password) {
-        showError('Please fill in all fields');
-        return;
-      }
-
-      // Show loading state
-      const btn = event.target.querySelector('button[type="submit"]');
-      const originalText = btn.textContent;
-      btn.disabled = true;
-      btn.textContent = 'Logging in...';
-
-      fetch('api-admin.php?action=login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email: email, password: password })
-      })
-      .then(response => response.json())
-      .then(data => {
-        btn.disabled = false;
-        btn.textContent = originalText;
-
-        if (data.status === 'success') {
-          // Check if admin or user login
-          if (data.admin && data.admin.isAdmin) {
-            // Store admin session in localStorage
-            localStorage.setItem('adminSession', JSON.stringify(data.admin));
-            showSuccess('Login successful! Redirecting...');
-            setTimeout(() => {
-              window.location.href = 'admin-dashboard.php';
-            }, 1500);
-          } else {
-            // Check if it's a regular user
-            // Try user login API
-            tryUserLogin(email, password, btn);
-          }
-        } else {
-          showError(data.message);
-        }
-      })
-      .catch(error => {
-        btn.disabled = false;
-        btn.textContent = originalText;
-        showError('Connection error: ' + error.message);
-      });
-    }
-
-    function tryUserLogin(email, password, btn) {
-      const originalText = btn.textContent;
-
-      fetch('api-users.php?action=login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email: email, password: password })
-      })
-      .then(response => response.json())
-      .then(data => {
-        btn.disabled = false;
-        btn.textContent = originalText;
-
-        if (data.status === 'success') {
-          localStorage.setItem('userSession', JSON.stringify(data.user));
-          showSuccess('Login successful! Redirecting...');
-          setTimeout(() => {
-            window.location.href = 'index.php';
-          }, 1500);
-        } else {
-          showError('Invalid email or password');
-        }
-      })
-      .catch(error => {
-        btn.disabled = false;
-        btn.textContent = originalText;
-        showError('Connection error: ' + error.message);
-      });
-    }
-
-    function showError(message) {
-      document.getElementById('errorMessage').textContent = message;
-      document.getElementById('errorMessage').style.display = 'block';
-      document.getElementById('successMessage').style.display = 'none';
-    }
-
-    function showSuccess(message) {
-      document.getElementById('successMessage').textContent = message;
-      document.getElementById('successMessage').style.display = 'block';
-      document.getElementById('errorMessage').style.display = 'none';
-    }
-  </script>
+  <script src="js/login.js"></script>
 
 </body>
 </html>

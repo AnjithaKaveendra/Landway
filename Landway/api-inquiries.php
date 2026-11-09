@@ -1,122 +1,26 @@
 <?php
-// API: Inquiry Management
-require_once 'config.php';
-
-$action = $_GET['action'] ?? '';
-$method = $_SERVER['REQUEST_METHOD'];
-
-switch ($action) {
+require_once __DIR__ . '/config.php';
+switch ($_GET['action'] ?? '') {
     case 'create':
-        if ($method === 'POST') {
-            createInquiry($_POST);
-        }
-        break;
-    
+        requireMethod('POST');
+        $data = getRequestData();
+        $values = [textField($data, 'contactName', true, 100), emailField($data, 'contactEmail'),
+            textField($data, 'contactPhone', false, 20), textField($data, 'contactSubject', false, 200),
+            textField($data, 'contactPropertyType', false, 50), textField($data, 'contactMessageText', true, 20000)];
+        $statement = dbQuery('INSERT INTO inquiries (contactName, contactEmail, contactPhone, contactSubject, contactPropertyType, contactMessageText) VALUES (?, ?, ?, ?, ?, ?)', $values);
+        respond(['status' => 'success', 'message' => 'Inquiry submitted successfully.', 'id' => $statement->insert_id], 201);
     case 'get-all':
-        if ($method === 'GET') {
-            getAllInquiries();
-        }
-        break;
-    
+        requireMethod('GET');
+        requireAdmin();
+        respond(['status' => 'success', 'data' => dbQuery('SELECT * FROM inquiries ORDER BY inquiryDate DESC, id DESC')->get_result()->fetch_all(MYSQLI_ASSOC)]);
     case 'get':
-        if ($method === 'GET') {
-            getInquiry($_GET['id'] ?? null);
-        }
-        break;
-    
+        requireMethod('GET');
+        requireAdmin();
+        respond(['status' => 'success', 'data' => findRecord('inquiries', $_GET['id'] ?? null)]);
     case 'delete':
-        if ($method === 'POST') {
-            deleteInquiry($_POST['id'] ?? null);
-        }
-        break;
-    
+        requireMethod('POST');
+        requireAdmin();
+        deleteRecord('inquiries', getRequestData()['id'] ?? null);
     default:
-        http_response_code(400);
-        echo json_encode(['status' => 'error', 'message' => 'Invalid action']);
+        fail('Invalid action.', 400);
 }
-
-function createInquiry($data) {
-    $conn = getDB();
-    
-    $contactName = sanitizeInput($data['contactName'] ?? '');
-    $contactEmail = sanitizeInput($data['contactEmail'] ?? '');
-    $contactPhone = sanitizeInput($data['contactPhone'] ?? '');
-    $contactSubject = sanitizeInput($data['contactSubject'] ?? '');
-    $contactPropertyType = sanitizeInput($data['contactPropertyType'] ?? '');
-    $contactMessageText = sanitizeInput($data['contactMessageText'] ?? '');
-    
-    if (!$contactName || !$contactEmail || !$contactMessageText) {
-        echo json_encode(['status' => 'error', 'message' => 'Required fields missing']);
-        return;
-    }
-    
-    $insert = "INSERT INTO inquiries (contactName, contactEmail, contactPhone, contactSubject, 
-               contactPropertyType, contactMessageText) 
-               VALUES (?, ?, ?, ?, ?, ?)";
-    
-    $stmt = $conn->prepare($insert);
-    $stmt->bind_param("ssssss", 
-        $contactName, $contactEmail, $contactPhone, $contactSubject, $contactPropertyType, $contactMessageText
-    );
-    
-    if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'Inquiry submitted successfully', 'id' => $stmt->insert_id]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Failed to submit inquiry']);
-    }
-}
-
-function getAllInquiries() {
-    $conn = getDB();
-    
-    $query = "SELECT * FROM inquiries ORDER BY inquiryDate DESC";
-    $result = $conn->query($query);
-    
-    $inquiries = [];
-    while ($row = $result->fetch_assoc()) {
-        $inquiries[] = $row;
-    }
-    
-    echo json_encode(['status' => 'success', 'data' => $inquiries]);
-}
-
-function getInquiry($id) {
-    $conn = getDB();
-    
-    if (!$id) {
-        echo json_encode(['status' => 'error', 'message' => 'Inquiry ID required']);
-        return;
-    }
-    
-    $query = "SELECT * FROM inquiries WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows === 1) {
-        echo json_encode(['status' => 'success', 'data' => $result->fetch_assoc()]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Inquiry not found']);
-    }
-}
-
-function deleteInquiry($id) {
-    $conn = getDB();
-    
-    if (!$id) {
-        echo json_encode(['status' => 'error', 'message' => 'Inquiry ID required']);
-        return;
-    }
-    
-    $delete = "DELETE FROM inquiries WHERE id = ?";
-    $stmt = $conn->prepare($delete);
-    $stmt->bind_param("i", $id);
-    
-    if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'Inquiry deleted successfully']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Delete failed']);
-    }
-}
-?>

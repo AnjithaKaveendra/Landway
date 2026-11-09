@@ -1,9 +1,11 @@
 <?php
-session_start();
+require_once __DIR__ . '/app.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="csrf-token" content="<?= e($_SESSION['csrfToken']) ?>">
+  <script src="js/api.js"></script>
   <meta charset="utf-8">
   <title>Contact Us - Landway</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -17,22 +19,7 @@ session_start();
 <body class="policy-page">
 
   <!-- Navbar -->
-  <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
-    <div class="container">
-      <a class="navbar-brand text-brand" href="index.php">Land<span class="color-b">way</span></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDefault">
-        <span></span><span></span><span></span>
-      </button>
-      <div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
-        <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="properties.php">Properties</a></li>
-          <li class="nav-item"><a class="nav-link active" href="contact.php">Contact</a></li>
-          <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <?php require __DIR__ . '/includes/nav.php'; ?>
 
   <!-- Contact Header -->
   <section class="policy-header contact-header">
@@ -91,8 +78,8 @@ session_start();
           </div>
 
           <div class="form-group">
-            <label for="contactMessage">Message <span class="required-field">*</span></label>
-            <textarea class="form-control form-control-a" id="contactMessage" rows="5" placeholder="Your message here..." required></textarea>
+            <label for="contactMessageText">Message <span class="required-field">*</span></label>
+            <textarea class="form-control form-control-a" id="contactMessageText" rows="5" placeholder="Your message here..." required></textarea>
           </div>
 
           <button type="submit" class="btn btn-b">Send Message</button>
@@ -111,7 +98,7 @@ session_start();
       const contactPhone = document.getElementById('contactPhone').value.trim();
       const contactSubject = document.getElementById('contactSubject').value.trim();
       const contactPropertyType = document.getElementById('contactPropertyType').value;
-      const contactMessageText = document.getElementById('contactMessage').value.trim();
+      const contactMessageText = document.getElementById('contactMessageText').value.trim();
 
       if (!contactName || !contactEmail || !contactPhone || !contactSubject || !contactMessageText) {
         showMessage('Please fill in all required fields', 'alert-danger');
@@ -167,5 +154,7 @@ session_start();
     }
   </script>
 
+<script src="lib/popper/popper.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

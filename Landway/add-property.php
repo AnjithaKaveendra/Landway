@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/app.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['userSession']) && !isset($_SESSION['adminSession'])) {
@@ -10,6 +10,8 @@ if (!isset($_SESSION['userSession']) && !isset($_SESSION['adminSession'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="csrf-token" content="<?= e($_SESSION['csrfToken']) ?>">
+  <script src="js/api.js"></script>
   <meta charset="utf-8">
   <title>Add Property - Landway</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -23,22 +25,7 @@ if (!isset($_SESSION['userSession']) && !isset($_SESSION['adminSession'])) {
 <body class="policy-page">
 
   <!-- Navbar -->
-  <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
-    <div class="container">
-      <a class="navbar-brand text-brand" href="index.php">Land<span class="color-b">way</span></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDefault">
-        <span></span><span></span><span></span>
-      </button>
-      <div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
-        <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="properties.php">Properties</a></li>
-          <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
-          <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <?php require __DIR__ . '/includes/nav.php'; ?>
 
   <!-- Add Property Header -->
   <section class="policy-header">
@@ -74,10 +61,10 @@ if (!isset($_SESSION['userSession']) && !isset($_SESSION['adminSession'])) {
               <label for="propertyType">Property Type <span class="required-field">*</span></label>
               <select class="form-control form-control-a" id="propertyType" required>
                 <option value="">Select type</option>
-                <option value="House">House</option>
-                <option value="Apartment">Apartment</option>
-                <option value="Land">Land</option>
-                <option value="Commercial">Commercial</option>
+                <option value="house">House</option>
+                <option value="apartment">Apartment</option>
+                <option value="land">Land</option>
+                <option value="commercial">Commercial</option>
               </select>
             </div>
             <div class="form-group col-md-6">
@@ -339,5 +326,7 @@ if (!isset($_SESSION['userSession']) && !isset($_SESSION['adminSession'])) {
     }
   </script>
 
+<script src="lib/popper/popper.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

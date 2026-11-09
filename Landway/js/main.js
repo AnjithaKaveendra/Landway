@@ -27,9 +27,10 @@
 	var navHeight = nav.outerHeight();
 
 	/*--/ ScrollReveal /Easy scroll animations for web and mobile browsers /--*/
-	window.sr = ScrollReveal();
+	window.sr = typeof ScrollReveal === 'function' ? ScrollReveal() : { reveal: function () {} };
 	sr.reveal('.foo', { duration: 1000, delay: 15 });
 
+	if ($.fn.owlCarousel) {
 	/*--/ Carousel owl /--*/
 	$('#carousel').owlCarousel({
 		loop: true,
@@ -55,6 +56,7 @@
 		$('.intro-content .intro-title-top, .intro-content .spacial').addClass('fadeIn animated').show();
 	});
 
+	}
 	/*--/ Navbar Collapse /--*/
 	$('.navbar-toggle-box-collapse').on('click', function () {
 		$('body').removeClass('box-collapse-closed').addClass('box-collapse-open');
@@ -83,6 +85,7 @@
 		}
 	});
 
+	if ($.fn.owlCarousel) {
 	/*--/ Property owl /--*/
 	$('#property-carousel').owlCarousel({
 		loop: true,
@@ -147,6 +150,7 @@
 		}
 	});
 
+	}
 })(jQuery);
 
 function checkPasswordMatch() {

@@ -1,7 +1,5 @@
 <?php
-// Landway - Main entry point
-// Redirect to login/main site as needed
-session_start();
+require_once __DIR__ . '/app.php';
 
 // If admin is logged in, go to dashboard
 if (isset($_SESSION['adminSession']) && $_SESSION['adminSession']['isAdmin']) {
@@ -9,18 +7,12 @@ if (isset($_SESSION['adminSession']) && $_SESSION['adminSession']['isAdmin']) {
     exit();
 }
 
-// If user is logged in, show dashboard or home
-if (isset($_SESSION['userSession'])) {
-    // Could redirect to user profile or home
-    // For now, show home page
-}
-
-// Otherwise show home page
-// The original index.html content can be here or served as separate page
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="csrf-token" content="<?= e($_SESSION['csrfToken']) ?>">
+  <script src="js/api.js"></script>
   <meta charset="utf-8">
   <title>Landway - Find Your Perfect Property</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -98,11 +90,14 @@ if (isset($_SESSION['userSession'])) {
         <?php endif; ?>
       </div>
 
-      <div style="margin-top: 60px; opacity: 0.8; font-size: 14px;">
-        <p>🚀 Powered by PHP & MySQL</p>
-        <p><a href="PHP_MYSQL_SETUP.md" style="color: white; text-decoration: underline;">Documentation</a> | 
-           <a href="QUICK_START.md" style="color: white; text-decoration: underline;">Quick Start</a> | 
-           <a href="CONVERSION_SUMMARY.md" style="color: white; text-decoration: underline;">What's New</a></p>
+      <div style="margin-top:40px">
+        <a href="about.php" style="color:white">About Landway</a> &middot;
+        <a href="policy.php" style="color:white">Privacy Policy</a>
+        <?php if (isLoggedIn()): ?>
+        <p>Welcome, <?= e($_SESSION['userSession']['firstName'] ?? '') ?>.</p>
+        <a href="saved-properties.php" style="color:white">Saved Properties</a> &middot;
+        <button type="button" class="btn btn-light" onclick="fetch('api-users.php?action=logout', {method:'POST'}).then(r=>r.json()).then(data=>{if(data.status==='success') location.reload(); else alert(data.message);}).catch(()=>alert('Unable to log out. Please try again.'))">Logout</button>
+        <?php else: ?><a href="register.php" style="color:white">Create an Account</a><?php endif; ?>
       </div>
     </div>
   </div>
